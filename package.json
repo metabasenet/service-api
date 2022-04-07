@@ -1,0 +1,22 @@
+{
+  "name": "web_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:shangqingdong/web_api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bignum": "^0.13.1",
+    "blakejs": "^1.1.1",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "request": "^2.88.2"
+  }
+}
