@@ -213,6 +213,58 @@ app.get('/listdelegatedetail', async function (req, res, next) {
   }; 
   res.json(txdata);
 });
+app.get('/blockstatistics', async function(req,res,next){
+  //let xAxisSql="select group_concat(concat('\\'',reward_date, '\\'')) as reward_date from (select distinct reward_date from blockstatistics where datediff(now(),str_to_date(reward_date,'%Y-%m-%d') ) < 31 order by reward_date)a";
+  let xAxisSql="select reward_date from (select distinct reward_date from blockstatistics where datediff(now(),str_to_date(reward_date,'%Y-%m-%d') ) < ? order by reward_date)a";
+  let xAxisRet = await query(xAxisSql,  [req.query.days]); 
+  xAxisRet = JSON.parse(JSON.stringify(xAxisRet));
+  let xAxisList=[];
+  for (let xAxisIndex =0;xAxisIndex < xAxisRet.length;xAxisIndex++){
+    xAxisList.push(xAxisRet[xAxisIndex].reward_date.slice(5));
+  }
+
+  let legendSql="SELECT a.reward_address, pool.name FROM (SELECT DISTINCT reward_address FROM blockstatistics WHERE DATEDIFF(NOW(), STR_TO_DATE(reward_date, '%Y-%m-%d')) < ? \
+                ORDER BY reward_address) a  LEFT JOIN pool ON pool.address = a.reward_address";
+  let legendRet= await  query(legendSql, [req.query.days]);
+  legendRet= JSON.parse(JSON.stringify(legendRet));
+  let legendList=[];
+  let seriesList=[];
+  for(let legendIndex =0; legendIndex< legendRet.length;legendIndex++){
+    let legend=legendRet[legendIndex].reward_address;
+    console.log(legend);
+    legendList.push(legendRet[legendIndex].name);
+    let amountSql="select a.reward_date,case when amount is null then 0 else amount end amount  from ( \
+      select distinct reward_date from blockstatistics where datediff(now(),str_to_date(reward_date,'%Y-%m-%d') ) < ? ) a \
+      left join blockstatistics on str_to_date(blockstatistics.reward_date,'%Y-%m-%d')= a.reward_date \
+      and blockstatistics.reward_address =?     order by a.reward_date";
+    let amountRet=await query(amountSql, [req.query.days,legend]);
+    amountRet=JSON.parse(JSON.stringify(amountRet));
+    let amountList=[];
+    for(let amountIndex =0; amountIndex <amountRet.length; amountIndex++ ){
+      amountList.push(amountRet[amountIndex].amount);
+    }
+    let nameSql="select name from pool where address =?";
+    let nameRet=await query(nameSql,[legend]);
+    nameRet=JSON.parse(JSON.stringify(nameRet));
+    if (nameRet.length == 1){
+      legend=nameRet[0].name;
+    }
+    var serie={
+      name:legend,
+      data:amountList,
+    }
+    seriesList.push(serie);
+  }
+
+
+  var charts={
+    xAxis:xAxisList,
+    legend:legendList,
+    series:seriesList
+
+  }
+  res.send(charts);
+});
 
 let server = app.listen(7711, function () {
   let host = server.address().address;
