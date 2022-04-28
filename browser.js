@@ -155,7 +155,7 @@ function Load(app,conn) {
       //收入
       let isql = 'select sum(amount) as income from Tx where `to` = ?';
       //支出
-      let esql = 'select sum(amount) as expend from Tx where `form` = ?';
+      let esql = 'select sum(amount) as expend from Tx where `from` = ?';
       //排行
       let sql = 'SELECT ranking from Rank where address=?';
 
