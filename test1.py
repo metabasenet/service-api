@@ -19,7 +19,7 @@ transaction = {
     "time": 1648607613,
     "nonce": 2,
     "from": "1632srrskscs1d809y3x5ttf50f0gabf86xjz2s6aetc9h9ewwhm58dj3",
-    "to": "20w0e9rcg7nq4pet8yz8ch2jt46f7hyjg256ys7dh5gddp0pja5mtm3js",
+    "to": "20w0e9rcg7nq4pet8yz8ch2jt46f7hyjg256ys7dh5gddp0pja5mtm3js",  # 投票地址
     "amount": "200.0000000000",
     "gaslimit": 13700,
     "gasprice": "0.0000010000",
@@ -74,9 +74,23 @@ vote = {
     "owner" : addressdata["templatedata"]["vote"]["owner"],
     "rewardmode" : addressdata["templatedata"]["vote"]["rewardmode"]
 }
-
+# 根据vote生成投票地址和模板数据
 response = requests.post(url+"/GetVote", json=vote)
 ret = json.loads(response.text)
 assert(ret["address"] == addressdata["address"])
 assert(ret["address"] == transaction["to"])
 assert('010101' + hex(len(ret["hex"])//2)[2:] + ret["hex"] == transaction["data"])
+
+vote = {
+    'address': '20w0e9rcg7nq4pet8yz8ch2jt46f7hyjg256ys7dh5gddp0pja5mtm3js',
+    'delegate': '20m02d02b17s1bq6z40kf10gkgytxseq5dzpgm3shhhsa2nj6dva81qvy',
+    'owner': '1632srrskscs1d809y3x5ttf50f0gabf86xjz2s6aetc9h9ewwhm58dj3',
+    'rewardmode': 0,
+    'hex':
+        '070002d46e4656a1728c310f0aed6fe5badcb5871382f02620dfdc15f2094b802600050168e4dca5989876ca64f16537e82d05c103e5695dfaf009a01632cb33639cc53000000000',
+  }
+
+response = requests.post(url+"/GetVote", json=vote)
+ret = json.loads(response.text)
+assert('0700' + ret['hex'] == vote['hex'])
+assert(ret['address'] == vote['address'])
