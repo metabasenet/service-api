@@ -16,4 +16,4 @@ genesis_addr = '1632srrskscs1d809y3x5ttf50f0gabf86xjz2s6aetc9h9ewwhm58dj3'
 
 response = requests.get("%s/transctions/%s" % (url,genesis_addr))
 obj = json.loads(response.text)
-print("交易记录:",obj)
+print("Tx:",obj)
