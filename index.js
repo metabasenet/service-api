@@ -106,8 +106,8 @@ app.post('/register', async function (req, res, next) {
     pub = pub.subarray(1);
     pub.reverse();
     await chain_method('importpubkey', { 'pubkey': pub.toString('hex') });
-    sql = 'insert into addr(walletId,hah_addr,eth_addr,btc_addr)values(?,?,?,?)';
-    await query(sql, [walletId, hah_addr, eth_addr, btc_addr]);
+    sql = 'insert into addr(walletId,mnt_addr,eth_addr,btc_addr)values(?,?,?,?)';
+    await query(sql, [walletId, mnt_addr, eth_addr, btc_addr]);
     console.log('register', 'Add');
     res.json({ 'status': 'add' });
   } else {
