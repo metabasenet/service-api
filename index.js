@@ -147,7 +147,7 @@ app.get('/transaction', async function (req, res, next) {
 app.get('/fee', async function (req, res, next) {
   console.log('fee', req.query.address);
   let ret = await chain_method('getbalance', { 'address': req.query.address });
-  let json = { 'nonce': parseFloat(ret[0].nonce), 'gas_price': 10000, 'gas_limit': 10000 };
+  let json = { 'nonce': parseInt(ret[0].nonce), 'gas_price': 10000, 'gas_limit': 10000 };
   res.json(json);
 });
 
