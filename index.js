@@ -246,6 +246,50 @@ app.get('/general_reward', async function (req, res, next) {
   }
   res.json(data);
 });
+
+// profit
+// http://127.0.0.1:7711/profit?addr=1231kgws0rhjtfewv57jegfe5bp4dncax60szxk8f4y546jsfkap3t5ws
+app.get('/profit', async function (req, res, next) {
+  console.log('profit');
+  /*
+  let sql = "select `to` as _id,amount,transtime,height from tx where `type` = 'defi-relation' and `from` = ? order by id desc limit 15";
+  let ret = await query(sql, [req.query.addr]);
+  ret = JSON.parse(JSON.stringify(ret));
+  let data = [];
+  for (let index = 0; index < ret.length; index++) {
+    const e = ret[index];
+    let obj = {
+      '_id': e._id.toString(),
+      'amount': e.amount.toString(),
+      'height': e.height.toString(),
+      'time': moment(e.transtime * 1000).format("YYYY-MM-DD HH:mm:ss")
+    };
+    data.push(obj);
+  }*/
+  let ret = [
+    {
+      'height': 100,
+      'balance': '10',
+      'stake_reward': '6',
+      'promotion_reward': '5'
+    },
+    {
+      'height': 200,
+      'balance': '20',
+      'stake_reward': '6',
+      'promotion_reward': '5'
+    },
+    {
+      'height': 400,
+      'balance': '30',
+      'stake_reward': '6',
+      'promotion_reward': '5'
+    }
+  ];
+  res.json(ret);
+});
+
+
 app.get('/blockstatistics', async function (req, res, next) {
   //let xAxisSql="select group_concat(concat('\\'',reward_date, '\\'')) as reward_date from (select distinct reward_date from blockstatistics where datediff(now(),str_to_date(reward_date,'%Y-%m-%d') ) < 31 order by reward_date)a";
   let xAxisSql = "select reward_date from (select distinct reward_date from blockstatistics where datediff(now(),str_to_date(reward_date,'%Y-%m-%d') ) < ? order by reward_date)a";
