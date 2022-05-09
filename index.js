@@ -263,7 +263,7 @@ app.get('/blockstatistics', async function (req, res, next) {
   let seriesList = [];
   for (let legendIndex = 0; legendIndex < legendRet.length; legendIndex++) {
     let legend = legendRet[legendIndex].reward_address;
-    console.log(legend);
+    //console.log(legend);
     legendList.push(legendRet[legendIndex].name);
     let amountSql = "select a.reward_date,case when amount is null then 0 else amount end amount  from ( \
       select distinct reward_date from blockstatistics where datediff(now(),str_to_date(reward_date,'%Y-%m-%d') ) < ? ) a \
