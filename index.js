@@ -229,7 +229,8 @@ app.get('/chart', async function (req, res, next) {
 // http://127.0.0.1:7711/general_reward?addr=1231kgws0rhjtfewv57jegfe5bp4dncax60szxk8f4y546jsfkap3t5ws
 app.get('/general_reward', async function (req, res, next) {
   console.log('general_reward');
-  let sql = "select id as _id,amount,transtime,height from tx where `type` = 'vote-reward' and `to` = ? order by id desc limit 15";
+  //and type = 'defi-relation'
+  let sql = "select `to` as _id,amount,transtime,height from tx where `type` = 'defi-relation' and `from` = ? order by id desc limit 15";
   let ret = await query(sql, [req.query.addr]);
   ret = JSON.parse(JSON.stringify(ret));
   let data = [];
