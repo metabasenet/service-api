@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>vote help</title>
+<style>
+   .main {
+        width: 100%;
+        position: relative;
+      
+   }
+   body{
+    background-color: #FFF68F;
+   }
+   body p{
+       font-size: 18px;
+   }
+   .f18{font-size:18px;}
+   .content{
+       text-indent: 2em;
+   }
+   .weight{font-weight: 700;}
+   .main-div{padding:0 0.6rem; display:none;}
+</style>
+<script type="">
+           function getParameter(param) {
+                var query = window.location.search; //获取URL地址中？后的全部字符  
+                var iLen = param.length; //获取你的参数名称长度  
+                var iStart = query.indexOf(param); //获取你该参数名称的其实索引  
+                if(iStart == -1) //-1为没有该参数  
+                    return "";
+                iStart += iLen + 1;
+                var iEnd = query.indexOf("&", iStart); //获取第二个参数的其实索引  
+                if(iEnd == -1) //只有一个参数  
+                    return query.substring(iStart); //获取单个参数的参数值  
+                return query.substring(iStart, iEnd); //获取第二个参数的值  
+            }
+            window.onload=function(){
+                var language = getParameter("language");
+                if (language =='zh'){document.getElementById("chinese").style.display='block';}
+                if (language =='en'){document.getElementById("english").style.display='block';}
+            }
+            
+
+</script>
+</head>
+<body >
+    <div class="main">
+        <div id="chinese"  class="main-div">
+            <div>
+                <p class="weight">1）投票锁定：</p>
+                <p class="f18 content">用户投票后会锁定三天（相当于锁定12960高度），锁定期间不能转帐，锁定开始时间从最后一次投票计时。
+                锁定DELEGATE模板地址或VOTE模板地址上的所有余额，但每天发放到DELEGATE模板地址或VOTE模板地址上的奖励不会被锁定，但奖励会按奖励的锁定规则执行。
+                如果DELEGATE模板地址或VOTE模板上的奖励未转出，并再次投票，则地址上的所有余额都会被锁定三天。
+                </p>
+            </div>
+            <div>
+                <p class="weight">2）奖励锁定：</p>
+                <p class="f18 content">生产区块或投票获得的奖励会被锁定，每天发放一次奖励，每天的奖励都会分成180天释放，即每天的奖励都会分成180份，每天释放一份。</p>
+            </div>
+            <div>
+                <p class="weight">3）奖励发放：</p>
+                <p class="f18 content">每天发放一次奖励，按高度计算每天，每天为4320高度，当高度除以4320余1时，发放奖励，如果一个区块存储不完所有奖励交易，则会在后面的区块中存储奖励交易。</p>
+            </div>
+        </div>
+        <div id="english"  class="main-div">
+            <div>
+                <p class="weight">1) Voting lock:</p>
+                <p class="f18 content">After voting, the user will be locked for three days (equivalent to locking 12,960 height). During the locking period, no money can be transferred. The locking time starts from the last vote. Lock all balances on the DELEGATE or VOTE template addresses, but daily rewards to the DELEGATE or VOTE template addresses will not be locked, but will follow the locking rules for rewards.If the rewards on the DELEGATE template address or the VOTE template do not roll out and you VOTE again, any balance on the address is locked up for three days.
+                </p>
+            </div>
+            <div>
+                <p class="weight">2) Reward locking:</p>
+                <p class="f18 content">The production block or voting reward will be locked, and the reward will be issued once a day. The reward for each day will be divided into 180 days, i.e., the reward for each day will be divided into 180 parts, and one part will be released each day.</p>
+            </div>
+            <div>
+                <p class="weight">3) Award payment:</p>
+                <p class="f18 content">Rewards are issued once a day, calculated by height, which is 4320 height per day. When height is divided by 4320 more than 1, rewards are issued. If a block cannot store all reward transactions, reward transactions will be stored in the following block.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

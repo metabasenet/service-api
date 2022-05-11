@@ -411,7 +411,7 @@ app.get("/bnb_balance", async function (req, res, next) {
 });
 app.get("/defi_relation", async function(req,res,next){
   let sql ="select id , block_hash , txid, `from` , `to`, 0 + convert(amount, char) as amount, `type`,\
-      FROM_UNIXTIME(transtime,'%Y-%m-%d %H:%i:%s') as `time` ,height   from tx where `type`='defi-relation' and `from`=?";
+      FROM_UNIXTIME(transtime,'%Y-%m-%d %H:%i:%s') as `time` ,height   from tx where `type`='defi-relation' and `from`=? order by height";
   let ret= await query(sql, [req.query.address]);
   let dataString =JSON.stringify(ret);
   res.json(JSON.parse(dataString));  
