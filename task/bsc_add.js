@@ -59,7 +59,7 @@ async function Run() {
     let height = await web3.eth.getBlockNumber();
     height = height - 4000;
     mnt.getPastEvents('Transfer', {
-        filter: {to: '0x52aa0e484f16543bfe5e7f0ffc87b868b169d96a'},
+        filter: {to: bridge_addr},
         fromBlock: height,
         toBlock:  'latest'
     },
