@@ -66,6 +66,29 @@ async function Add(txid,reserve0,reserve1,blockNumber) {
         sql = `insert into uniswap(height,reserve0,reserve1,price,txid,timestamp)value(${blockNumber},'${reserve0}','${reserve0}',${price},'${txid}',${b.timestamp})`;
         await query(sql);
         console.log('Add ok.',txid);
+
+        let priceSql="select  price  from uniswap where FROM_UNIXTIME(timestamp,'%Y-%m-%d') != CURDATE() order by height desc  limit 1 ";
+        let priceRet=await query(priceSql,[]);
+        let price24h=price;
+        if(priceRet.length>0){
+            price24h=priceRet[0].price;        
+        }else{
+            priceSql="select  price  from uniswap limit 1 ";
+            priceRet=await query(priceSql,[]);
+            if(priceRet.length>0){
+                 price24h=priceRet[0].price;               
+            }
+        }
+        let price6=parseFloat(price).toFixed(6);     
+        let selectSql ="select * from quotations where tradePairId ='MNT/USDT'";
+        let selectRet= await query(selectSql);
+        let updateSql =`update quotations set price=${price6},price24h=${price24h}  where tradePairId ='MNT/USDT'`;
+        if (selectRet.length==0){
+            updateSql=`insert into quotations(tradePairId, price, precision, price24h) values ('MNT/USDT',${price6},8,${price24h})`;
+        } 
+        await query(updateSql);
+        console.log('update price ok.',price);
+
     } else {
         console.log("Already exists.",txid);
     }
