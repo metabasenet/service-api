@@ -251,7 +251,15 @@ app.get('/general_reward', async function (req, res, next) {
 // http://127.0.0.1:7711/profit?addr=1231kgws0rhjtfewv57jegfe5bp4dncax60szxk8f4y546jsfkap3t5ws
 app.get('/profit', async function (req, res, next) {
   console.log('profit');
-  let sql ="select id, vote, extend, vote + extend as balance,  height, txid, FROM_UNIXTIME(`time`,'%Y-%m-%d %H:%i:%s') as `time`  from reward where addr = ?";
+ 
+  let pagenum=req.query.pagenum;
+  let pagesize=req.query.pagesize;
+
+  let sql_count="select count(id) as count from reward where addr=?";
+  let ret_count=await query(sql_count, [req.query.address]);
+  let count = JSON.parse(JSON.stringify(ret_count[0]));
+  count = Number(count["count"]);
+  let sql ="select id, vote, extend, vote + extend as balance,  height, txid, FROM_UNIXTIME(`time`,'%Y-%m-%d %H:%i:%s') as `time`  from reward where addr = ? order by height limit " + (pagenum -1) * pagesize +" , "+ pagesize;
   let ret=await query(sql , [req.query.address]);
   let result=[];
   for(let index =0; index <ret.length;index++){
@@ -265,7 +273,15 @@ app.get('/profit', async function (req, res, next) {
      }
      result.push(reward);
   }
-  res.json(result);
+  let pagecount =Math.ceil(count / pagesize);
+  let data={
+    pagenum:pagenum,
+    pagesize:pagesize,
+    count:count,
+    pagecount:pagecount,
+    data:result,
+  }
+  res.json(data);
 });
 
 
