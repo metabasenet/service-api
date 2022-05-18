@@ -251,42 +251,21 @@ app.get('/general_reward', async function (req, res, next) {
 // http://127.0.0.1:7711/profit?addr=1231kgws0rhjtfewv57jegfe5bp4dncax60szxk8f4y546jsfkap3t5ws
 app.get('/profit', async function (req, res, next) {
   console.log('profit');
-  /*
-  let sql = "select `to` as _id,amount,transtime,height from tx where `type` = 'defi-relation' and `from` = ? order by id desc limit 15";
-  let ret = await query(sql, [req.query.addr]);
-  ret = JSON.parse(JSON.stringify(ret));
-  let data = [];
-  for (let index = 0; index < ret.length; index++) {
-    const e = ret[index];
-    let obj = {
-      '_id': e._id.toString(),
-      'amount': e.amount.toString(),
-      'height': e.height.toString(),
-      'time': moment(e.transtime * 1000).format("YYYY-MM-DD HH:mm:ss")
-    };
-    data.push(obj);
-  }*/
-  let ret = [
-    {
-      'height': 100,
-      'balance': '10',
-      'stake_reward': '6',
-      'promotion_reward': '5'
-    },
-    {
-      'height': 200,
-      'balance': '20',
-      'stake_reward': '6',
-      'promotion_reward': '5'
-    },
-    {
-      'height': 400,
-      'balance': '30',
-      'stake_reward': '6',
-      'promotion_reward': '5'
-    }
-  ];
-  res.json(ret);
+  let sql ="select id, vote, extend, vote + extend as balance,  height, txid, FROM_UNIXTIME(`time`,'%Y-%m-%d %H:%i:%s') as `time`  from reward where addr = ?";
+  let ret=await query(sql , [req.query.address]);
+  let result=[];
+  for(let index =0; index <ret.length;index++){
+     let reward={
+       vote:ret[index].vote,
+       extend:ret[index].extend,
+       balance:ret[index].balance,
+       height:ret[index].height,
+       txid:ret[index].txid,
+       time:ret[index].time,
+     }
+     result.push(reward);
+  }
+  res.json(result);
 });
 
 
