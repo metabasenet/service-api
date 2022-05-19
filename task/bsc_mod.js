@@ -1,6 +1,7 @@
 const Web3 = require('web3');
-const mysql  = require('mysql');
-
+const mysql = require('mysql');
+const Common = require('ethereumjs-common').default;
+const Tx = require('ethereumjs-tx').Transaction;
 // mainnet
 //const web3 = new Web3('https://bsc-dataseed1.binance.org:443');
 // testnet
@@ -32,19 +33,20 @@ const abi = [
 
 const mnt_addr = '0x450af0a7c8372eee72dd2e4833d9aac4928c151f';
 const bridge_addr = '0x0873093DEb492A6425d85906E2CE6E856BCDC71F';
-const bridge_key = '0x589dac19a0225798be3848586132e9bb22bf2ecdd7c55240e9e3106ebda6e53f';
-
+//const bridge_key = '0x589dac19a0225798be3848586132e9bb22bf2ecdd7c55240e9e3106ebda6e53f';
+const bridge_key = '589dac19a0225798be3848586132e9bb22bf2ecdd7c55240e9e3106ebda6e53f';
 web3.eth.accounts.wallet.add(bridge_key);
 
-const conn = mysql.createConnection({     
-    host     : '127.0.0.1',
-    user     : 'mnt',
-    password : '1234qwer',
+const conn = mysql.createConnection({
+    host: '127.0.0.1',
+    user: 'mnt',
+    password: '1234qwer',
     port: '3306',
-    database: 'mnt'});
+    database: 'mnt'
+});
 conn.connect();
 
-function Update(id,bsc_txid) {
+function Update(id, bsc_txid) {
     const sql = 'update mnt_bsc set bsc_txid = ?, state = 1, bsc_time = ? where id = ?'
     const sqlParams = [bsc_txid, (0 | Date.now() / 1000), id];
     conn.query(sql, sqlParams, function (error, results, fields) {
@@ -52,25 +54,57 @@ function Update(id,bsc_txid) {
         console.log('bsc OK.');
     });
 }
+/*
+function transfer(to, amount, id) {
+    const mnt = new web3.eth.Contract(abi, mnt_addr);
+    mnt.methods.transfer(to, web3.utils.toWei(amount.toString(), 'ether')).send({
+        from: bridge_addr,
+        gasLimit: web3.utils.toHex(80000),
+        gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'Gwei'))
+    }).then(
+        (ret) => {
+            Update(id, ret.transactionHash);
+        }
+    );
+}*/
 
-function transfer(to, amount,id) {
-    const mnt = new web3.eth.Contract(abi,mnt_addr);
-    mnt.methods.transfer(to, web3.utils.toWei(amount.toString(),'ether')).send({from: bridge_addr, 
+function transfer(toAddr, amount, id) {
+    return new Promise(fun => {
+        web3.eth.getTransactionCount(bridge_addr, (err, txCount) => {         
+            let con = new web3.eth.Contract(abi, mnt_addr);
+            let txObject = {
+                nonce: web3.utils.toHex(txCount),
                 gasLimit: web3.utils.toHex(80000),
-                gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'Gwei'))}).then(
-                    (ret) => {
-                        Update(id,ret.transactionHash);
-                    }
-                );
-}
+                gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'Gwei')),
+                to: mnt_addr,
+                data: con.methods.transfer(toAddr, web3.utils.toHex(web3.utils.toWei(amount.toString(), 'ether'))).encodeABI()    // if bnb ,not need send.
+            }           
+            //56
+            const BSC_MAIN = Common.forCustomChain('mainnet', { name: 'bnb', networkId: 97, chainId: 97 }, 'petersburg');
+            const tx = new Tx(txObject, { common: BSC_MAIN });
+            let privKey = new Buffer.from(bridge_key, 'hex');
+            tx.sign(privKey);
+            const serializedTx = tx.serialize();
+            const raw = '0x' + serializedTx.toString('hex');
+            web3.eth.sendSignedTransaction(raw, (err, txHash) => {
+                if (err != null) {
+                    fun(err);                    
+                } else {
+                    Update(id, txHash);
+                    fun(txHash);                  
+                }
+                //console.log('err:', err, 'txHash:', txHash);            
+            });
 
-function Run(txid,from,value) {
-    let sql = 'select mnt_bsc.`value`,addr.eth_addr as `to`,mnt_bsc.id from mnt_bsc inner join addr on addr.mnt_addr = mnt_bsc.`from` where mnt_bsc.state is null and mnt_bsc.`type` = 2';
-    conn.query(sql, function (error, results, fields) {
+        });
+    });
+};
+function Run(txid, from, value) {
+    let sql = 'select id,mnt_bsc.`value`,addr.eth_addr as `to`,mnt_bsc.id from mnt_bsc inner join addr on addr.mnt_addr = mnt_bsc.`from` where mnt_bsc.state is null and mnt_bsc.`type` = 2';
+    conn.query(sql, async function (error, results, fields) {
         if (error) throw error;
         for (const obj of results) {
-            transfer(obj.to,obj.value,obj.id);
-            //console.log(obj.to,obj.value);
+            await transfer(obj.to, obj.value, obj.id);
         }
         setTimeout(Run, 5000);
     });
