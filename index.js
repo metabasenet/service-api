@@ -14,7 +14,8 @@ const Web3 = require('web3');
 // mainnet
 //const web3 = new Web3('https://bsc-dataseed1.binance.org:443');
 // testnet
-const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
+//const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
+const web3 = new Web3('https://shangqingdong.work/bsc/');
 
 const url = 'http://127.0.0.1:8812';
 const conn = mysql.createConnection({
@@ -264,12 +265,12 @@ app.get('/profit', async function (req, res, next) {
   let result=[];
   for(let index =0; index <ret.length;index++){
      let reward={
-       vote:ret[index].vote,
-       extend:ret[index].extend,
-       balance:ret[index].balance,
-       height:ret[index].height,
-       txid:ret[index].txid,
-       time:ret[index].time,
+       vote:ret[index].vote.toString(),
+       extend:ret[index].extend.toString(),
+       balance:ret[index].balance.toString(),
+       height:ret[index].height.toString(),
+       txid:ret[index].txid.toString(),
+       time:ret[index].time.toString(),
      }
      result.push(reward);
   }

@@ -30,7 +30,7 @@ function Add(txid,from,value,blockNumber) {
 // mainnet
 //const web3 = new Web3('https://bsc-dataseed1.binance.org:443');
 // testnet
-const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
+const web3 = new Web3('https://data-seed-prebsc-2-s3.binance.org:8545');
 const abi = [{
 	"anonymous": false,
 	"inputs": [{
@@ -55,8 +55,8 @@ const abi = [{
 
 const mnt = new web3.eth.Contract(abi,mnt_addr);
 
-async function Run() {
-    let height = await web3.eth.getBlockNumber();
+async function Run1() {    
+    let height =  web3.eth.getBlockNumber();   
     height = height - 4000;
     mnt.getPastEvents('Transfer', {
         filter: {to: bridge_addr},
@@ -70,6 +70,12 @@ async function Run() {
         // 5s
         setTimeout(Run, 5000);
   });
+}
+async function Run(){
+    console.log("run");
+ web3.eth.getBlockNumber().then((result)=>{
+     console.log(result);
+ })
 }
 
 Run();
