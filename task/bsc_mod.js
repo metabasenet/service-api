@@ -2,10 +2,13 @@ const Web3 = require('web3');
 const mysql = require('mysql');
 const Common = require('ethereumjs-common').default;
 const Tx = require('ethereumjs-tx').Transaction;
+let fs =require('fs');
+let moment= require('moment');
 // mainnet
 //const web3 = new Web3('https://bsc-dataseed1.binance.org:443');
 // testnet
-const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
+//const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
+const web3=new Web3('https://shangqingdong.work/bsc/');
 
 const abi = [
     {
@@ -107,6 +110,13 @@ function Run(txid, from, value) {
             await transfer(obj.to, obj.value, obj.id);
         }
         setTimeout(Run, 5000);
+        
+        // let currentTime =moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+        // fs.writeFile('../logs/log.txt', currentTime, '', function (err) {
+        //     if (err) {
+        //       throw err;
+        //     }
+        // });
     });
 }
 
