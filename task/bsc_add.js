@@ -57,21 +57,27 @@ const abi = [{
 const mnt = new web3.eth.Contract(abi,mnt_addr);
 
 async function Run() {    
-    let height =  await web3.eth.getBlockNumber();  
-    console.log('height',height); 
-    height = height - 4000;
-    mnt.getPastEvents('Transfer', {
-        filter: {to: bridge_addr},
-        fromBlock: height,
-        toBlock:  'latest'
-    },
-  ).then(function(events) {
-        for (const obj of events) {
-            Add(obj.transactionHash,obj.returnValues["0"],obj.returnValues["2"],obj.blockNumber);
-        }
-        // 5s
+    try{
+        let height =  await web3.eth.getBlockNumber();  
+        console.log('height',height); 
+        height = height - 4000;
+        mnt.getPastEvents('Transfer', {
+            filter: {to: bridge_addr},
+            fromBlock: height,
+            toBlock:  'latest'
+        },
+      ).then(function(events) {
+            for (const obj of events) {
+                Add(obj.transactionHash,obj.returnValues["0"],obj.returnValues["2"],obj.blockNumber);
+            }
+            // 5s
+            setTimeout(Run, 5000);
+      });
+    }catch(err){
+        console.log(err);
         setTimeout(Run, 5000);
-  });
+    }
+
 }
 // async function Run(){
 //     console.log("run");
