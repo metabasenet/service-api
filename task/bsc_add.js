@@ -71,11 +71,11 @@ async function Run() {
                 Add(obj.transactionHash,obj.returnValues["0"],obj.returnValues["2"],obj.blockNumber);
             }
             // 5s
-            setTimeout(Run, 5000);
+           // setTimeout(Run, 5000);
       });
     }catch(err){
-        console.log(err);
-        setTimeout(Run, 5000);
+        console.log(new Date(),err);
+        //setTimeout(Run, 5000);
     }
 
 }
