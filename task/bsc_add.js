@@ -1,30 +1,65 @@
 const Web3 = require('web3');
 const mysql  = require('mysql');  
-
+ 
 const mnt_addr = '0x450af0a7c8372eee72dd2e4833d9aac4928c151f';
 const bridge_addr = '0x0873093DEb492A6425d85906E2CE6E856BCDC71F';
 
-const conn = mysql.createConnection({     
-            host     : '127.0.0.1',       
-            user     : 'mnt',              
-            password : '1234qwer',       
-            port: '3306',                   
-            database: 'mnt'});
-conn.connect();
+const config ={     
+    host     : '127.0.0.1',       
+    user     : 'mnt',              
+    password : '1234qwer',       
+    port: '3306',                   
+    database: 'mnt',
+    connectionLimit: 50, //
+    queueLimit: 3 //
+}
+//var conn;
+
+var pool = mysql.createPool(config);
+
+//const conn = mysql.createConnection(config);
+// function handleError (err) {
+//     if (err) {        
+//         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+//         connect();
+//         } else {
+//         console.error(err.stack || err);
+//         }
+//     }
+// }          
+//conn.connect();
+// function connect () {
+//     conn = mysql.createConnection(config);
+//     conn.connect(handleError);
+//     conn.on('error', handleError);
+//   }
+ 
+//connect();
 
 function Add(txid,from,value,blockNumber) {
-    let sql = `SELECT count(*) as c from mnt_bsc where bsc_txid = '${txid}'`;
-    conn.query(sql, async (error, results, fields) => {
-        if (error) throw error;
-        if (results[0].c == 0) {
-            const b = await web3.eth.getBlock(blockNumber);
-            sql = `INSERT INTO mnt_bsc(bsc_txid,\`from\`,\`to\`,\`value\`,\`type\`,mnt_time) VALUES(?,?,?,?,1,?)`;
-            conn.query(sql,[txid,from,bridge_addr, web3.utils.fromWei(value,'ether'),b.timestamp]);
-            console.log('add success.');
+    pool.getConnection(function(err, connection) {    
+        if(err){
+            console.log(" Failed to establish connection with MySQL database: " + err);
         } else {
-            console.log('Data already exists');
+                //console.log(" Successfully established connection with MySQL database ");
+                let sql = `SELECT count(*) as c from mnt_bsc where bsc_txid = '${txid}'`;
+                connection.query(sql, async(error, results) => {
+                    if (error) throw error;
+                    if (results[0].c == 0) {
+                        const b = await web3.eth.getBlock(blockNumber);
+                        sql = `INSERT INTO mnt_bsc(bsc_txid,\`from\`,\`to\`,\`value\`,\`type\`,mnt_time) VALUES(?,?,?,?,1,?)`;
+                        connection.query(sql,[txid,from,bridge_addr, web3.utils.fromWei(value,'ether'),b.timestamp]);
+                        console.log('add success.');
+                    } else {
+                        console.log('Data already exists');
+                    } 
+                // Release connection return connection 
+                connection.release();        
+                // Close the connection pool with the end method of the connection pool object 
+                //pool.end();
+            })
         }
-    });
+    })
 }
 
 // mainnet
@@ -56,7 +91,9 @@ const abi = [{
 
 const mnt = new web3.eth.Contract(abi,mnt_addr);
 
-async function Run() {    
+async function Run() { 
+    //connect();
+    console.log('getBlockNumber...');   
     try{
         let height =  await web3.eth.getBlockNumber();  
         console.log('height',height); 
@@ -71,11 +108,15 @@ async function Run() {
                 Add(obj.transactionHash,obj.returnValues["0"],obj.returnValues["2"],obj.blockNumber);
             }
             // 5s
-           // setTimeout(Run, 5000);
+            setTimeout(Run, 10000);
+      }).catch((err)=>{
+          console.log(new Date(), err);
+        setTimeout(Run, 10000);
+
       });
     }catch(err){
         console.log(new Date(),err);
-        //setTimeout(Run, 5000);
+        setTimeout(Run, 10000);
     }
 
 }

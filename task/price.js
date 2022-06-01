@@ -96,7 +96,16 @@ async function Add(txid,reserve0,reserve1,blockNumber) {
 }
 
 async function Run() {
-    const new_height = await web3.eth.getBlockNumber();
+    //const new_height = await web3.eth.getBlockNumber();
+    let new_height=0;
+    await web3.eth.getBlockNumber(function (error, result) {
+        if(!error) {  
+          new_height=result;
+        }else{
+            console.log('err',error);
+            return;
+        }
+      })      
     let to_height = 0;
     let from_height = 0;
 

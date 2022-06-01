@@ -6,5 +6,5 @@ while true
 do
     echo "--------------------------------------------------------------"
     node bsc_add.js
-    sleep 5000
+    sleep 5
 done

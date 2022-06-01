@@ -1,5 +1,7 @@
 const lib = require('./lib.js');
-
+let querypool =require('./pool.js');
+const express = require('express');
+const app = express();
 let transaction = {
     "txid" : "19ca625abc471e69bd33b2b6fe6333c3945d164da02c650eb06326e4f910692f",
     "version" : 1,
@@ -34,6 +36,65 @@ const ret1 = lib.GetTx(ts, fork, nonce, from, to, amount, gasPrice, gasLimit, tr
 console.log(ret1.tx_hash);
 console.log("969e0fde99c16fc03ebfc35286a24c77004c2018917235beb6c8f5a47a403c94");
 
+
+
+// query("SELECT * from search where Rst > ?",[10],function(err,vals,fields){
+//     //do something
+//     console.log('The results is: ', vals);
+// });
+
+function query(sql, params) {
+    return new Promise(fun => {
+        querypool(sql,params,function(err,ret,fields){
+           // console.log('err',err)
+           // console.log('ret',ret);
+            if(err){
+                fun(err);
+                return;
+            }
+            fun(ret);
+        });
+    });
+  };
+
+app.get("/getUniswap", async function (req, res, next) {
+    let times = parseInt(req.query.times);
+    times=10;
+    let sql = "select * , FROM_UNIXTIME(timestamp,'%m-%d %H:%i') as time  from (select *  from uniswap order by id desc limit ? ) a order by id";
+    let ret =await query(sql,[times,times],function(err,vals,fields){
+           });
+    var prices = [];
+    let minPrice = 999999;
+    let maxPrice = 0;
+    for (let index = 0; index < ret.length; index++) {
+        //console.log(ret[index].price);
+        prices.push({ value: ret[index].price, dateTime: ret[index].time });
+        if (ret[index].price < minPrice) { minPrice = ret[index].price; }
+        if (ret[index].price > maxPrice) { maxPrice = ret[index].price; }
+    }
+    let legendList = ['MNT Price'];
+    let xAxisList = [];
+    for (let index = times; index > 0; index--) {
+        xAxisList.push(index);
+    }
+    var seriesList = [{
+        name: 'MNT Price',
+        data: prices
+    }]
+    var charts = {
+        xAxis: xAxisList,
+        legend: legendList,
+        series: seriesList,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+
+    }
+    res.send(charts);
+  })
+
+ 
+  
+
 /*
 if (ret1.tx_hex == transaction.serialization.substring(0, ret1.tx_hex.length)) {
     console.log("tx_hex OK");
@@ -41,3 +102,8 @@ if (ret1.tx_hex == transaction.serialization.substring(0, ret1.tx_hex.length)) {
     console.log("tx_hex err");
 }
 */
+let server = app.listen(7711, function () {
+    let host = server.address().address;
+    let port = server.address().port;
+    console.log('http://%s:%s', host, port);
+  });
