@@ -12,16 +12,16 @@ const config ={
 
 var pool = mysql.createPool(config);
 var querypool = function (sql, params, callback) {
-pool.getConnection(function (err, conn) {
-    if (err) {
-    callback(err, null, null);
-    } else {
-    conn.query(sql, params,function (qerr, vals, fields) {
-        callback(qerr, vals, fields);
-        conn.release();
+    pool.getConnection(function (err, conn) {
+        if (err) {
+            callback(err, null, null);
+        } else {
+            conn.query(sql, params,function (qerr, vals, fields) {
+                callback(qerr, vals, fields);
+                conn.release();
+            });
+        }
     });
-    }
-});
 };
   
 module.exports=querypool;   
