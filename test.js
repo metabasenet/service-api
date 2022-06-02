@@ -61,8 +61,7 @@ app.get("/getUniswap", async function (req, res, next) {
     let times = parseInt(req.query.times);
     times=10;
     let sql = "select * , FROM_UNIXTIME(timestamp,'%m-%d %H:%i') as time  from (select *  from uniswap order by id desc limit ? ) a order by id";
-    let ret =await query(sql,[times,times],function(err,vals,fields){
-           });
+    let ret =await query(sql,[times,times],function(err,vals,fields){});
     var prices = [];
     let minPrice = 999999;
     let maxPrice = 0;
