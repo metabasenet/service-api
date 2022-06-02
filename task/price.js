@@ -151,6 +151,9 @@ async function Run() {
             console.log(`new_height-height : ${new_height - height}, height_setup : ${height_setup}`);
         }
         UpdateHeight(height);
+  }).catch((error)=>{
+    console.log( new Date() ,'getPastEvents error',error);
+    setTimeout(Run, 10000);
   });
 }
 

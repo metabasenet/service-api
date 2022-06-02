@@ -101,6 +101,18 @@ if (ret1.tx_hex == transaction.serialization.substring(0, ret1.tx_hex.length)) {
     console.log("tx_hex err");
 }
 */
+
+
+
+
+const port = 3000
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+
+
 let server = app.listen(7711, function () {
     let host = server.address().address;
     let port = server.address().port;
