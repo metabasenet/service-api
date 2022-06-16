@@ -17,7 +17,7 @@ const querypool =require('./pool.js');
 //const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
 const web3 = new Web3('https://shangqingdong.work/bsc/');
 
-const url = 'http://127.0.0.1:8812';
+const url = 'http://127.0.0.1:6602';
 const conn = mysql.createConnection({
   host: '127.0.0.1',
   port: '3306',
