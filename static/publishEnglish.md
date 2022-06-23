@@ -40,7 +40,7 @@ After that, every six years, the additional issuance is halved, and so on
 ###### 1)Dpos voting reward system
 &emsp;&emsp;All MNT players with a certain number of votes can vote and 50% of the total output per day is used for voting rewards
 &emsp;&emsp;DPOS voting rules are detailed in the voting instructions
-&emsp;&emsp;***There are 27 DPOS voting nodes, and the initial voting amount of each node is 70,000 yuan and the upper limit is 1 million yuan. If the voting amount of a node is less than 70,000 yuan, the node does not participate in block generation. If the voting amount of a node is more than 1 million yuan, it is calculated as 1 million yuan***
+&emsp;&emsp;***There are 27 DPOS voting nodes, and the initial voting amount of each node is 10,000 yuan and the upper limit is 1 million yuan. If the voting amount of a node is less than 10,000 yuan, the node does not participate in block generation. If the voting amount of a node is more than 1 million yuan, it is calculated as 1 million yuan***
 
 The formula for calculating the success rate of voting nodes is as follows:
 
@@ -48,18 +48,18 @@ The formula for calculating the success rate of voting nodes is as follows:
 SR=Node success rate
 ∑i=Voting node voting amount
 $∑1 + ∑2+ ∑3+...+∑27$ =Total vote amount of 27 nodes
-∑i If the number of votes is less than 70,000 then ∑i=0
+∑i If the number of votes is less than 10,000 then ∑i=0
 ∑i If more than 1,000,000   then ∑i=1,000,000
 
 If there are 27 nodes, the amount of each vote is as follows:
 
 The amount of votes for nodes 1-10
-> ∑1=10,000
-∑2=20,000
-∑3=30,000
-∑4=40,000
-∑5=50,000
-∑6=60,000
+> ∑1=1,000
+∑2=2,000
+∑3=3,000
+∑4=4,000
+∑5=5,000
+∑6=6,000
 ∑7=70,000
 ∑8=80,000
 ∑9=90,000
@@ -79,7 +79,7 @@ According to the rules
 > $∑1 + ∑2+ ∑3+...+∑27$=0+0+0+0+0+0+70,000+80,000+90,000+100,000 
 +500,000 * 10 +700,000+800,000+900,000+1,000,000*4=11,740,000
 
-The voting success rate of nodes 1-10 is(If the value is smaller than 70,000, blocks are not generated，***data is 0***)
+The voting success rate of nodes 1-10 is(If the value is smaller than 10,000, blocks are not generated，***data is 0***)
 > SR1=0
 SR2=0
 SR3=0
