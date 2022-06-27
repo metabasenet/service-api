@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>transaction help</title>
+<style>
+   .main {
+        width: 100%;
+        position: relative;
+      
+   }
+   body{
+    background-color: #FFF68F;
+   }
+   body p{
+       font-size: 18px;
+   }
+   .f18{font-size:18px;}
+   .content{
+       text-indent: 2em;
+   }
+   .weight{font-weight: 700;}
+   .main-div{padding:0 0.6rem; display:none;}
+</style>
+<script type="">
+           function getParameter(param) {
+                var query = window.location.search;  
+                var iLen = param.length;  
+                var iStart = query.indexOf(param); 
+                if(iStart == -1) 
+                    return "";
+                iStart += iLen + 1;
+                var iEnd = query.indexOf("&", iStart); 
+                if(iEnd == -1) 
+                    return query.substring(iStart); 
+                return query.substring(iStart, iEnd);
+            }
+            window.onload=function(){
+                var language = getParameter("language");
+                if (language =='zh'){document.getElementById("chinese").style.display='block';}
+                if (language =='en'){document.getElementById("english").style.display='block';}
+            }
+            
+
+</script>
+</head>
+<body >
+    <div class="main">
+        <div id="chinese"  class="main-div">
+            <div>
+                <p class="f18 content">在交易功能中，您可以进行授权，MNT和USDT的兑换交易， 添加流动性， 移除流动性和查看MNT的价格走势</p>
+                <p class="weight">1、授权</p>
+                <p class="f18 content">用户新建地址后需要完成两种授权后才可以进行上述各种操作，授权分为MNT合约地址授权和USDT合约地址授权，两种授权在交易页面底部，您可以通过点击进行授权，
+                    授权成功后，以后不需要重新授权,授权会损耗燃料BNB，请确保BNB有足够的余额，才可以授权。
+                </p>
+            </div>
+            <div>                 
+                <p class="weight">2、兑换</p>
+                <p class="f18 content">您可以在SWAP中进行MNT和USDT的相互兑换，您可以将MNT兑换为USDT。或者将USDT兑换为MNT，兑换的价格按照当前MNT/USDT的价格进行等比例兑换，允许兑换的货币不大于持有的货币
+                </p>
+            </div>
+            <div>                 
+                <p class="weight">3、添加流动性</p>
+                <p class="f18 content">您可以在Liquidity中将MNT和USDT按照等比例加入流动性LP，允许加入流动性LP的金额不大于MNT和USDT对应的最低价值
+                </p>
+            </div>
+            <div>                 
+                <p class="weight">4、移除流动性</p>
+                <p class="f18 content">您可以在Remove中移除任意数量已经添加的流动性LP， 移除后，LP减少，减少的流动性返回到您的MNT-BEP20和USDT-BEP20中，又可以进行兑换，交易
+                </p>
+            </div>
+            <div>                 
+                <p class="weight">5、查看MNT价格走势</p>
+                <p class="f18 content">您可以在Trend中查看最近十几笔 MNT的价格成交走势
+                </p>
+            </div>
+            <div>                 
+                <p class="weight">信息栏附录：</p>
+                <p class="f18 content">MNT-BEP20：当前地址下持有的MNT的数量</p>
+                <p class="f18 content">USDT-BEP20：当前地址下持有的USDT的数量</p>
+                <p class="f18 content">LP：当前地址下持有的流动性的数量</p>
+                <p class="f18 content">BNB：当前地址下持有的BNB的数量</p>
+                <p class="f18 content">Pool MNT：MNT合约地址的池子的总数量</p>
+                <p class="f18 content">Pool USDT： USDT合约地址的池子的总数量</p>
+                <p class="f18 content">Price：MNT兑换USDT的价格</p>
+            </div>
+            <div> 
+                <p class="f18 content">在底部的状态栏中，您可以查看最近操作的业务成功状态
+                </p>
+            </div>
+        </div>
+        <div id="english"  class="main-div">
+            <div>
+                <p class="f18 content">In the trading function, you can conduct authorization, MNT and USDT exchange transactions, add liquidity, remove liquidity and view MNT price movements</p>
+                <p class="weight">1. authorization</p>
+                <p class="f18 content">Users need to complete two authorized after new address just can carry out various operations, the authorization is divided into MNT address authorization and USDT contracts authorized contract, two kinds of authorization in trading at the bottom of the page, you can click on authorize, after the success of the authorization, later don't need to be authorized, the authorization will loss fuel BNB, please ensure the BNB have enough balance, Before authorizing.
+                </p>
+            </div>
+            <div>
+                <p class="weight">2. swap</p>
+                <p class="f18 content">You can exchange MNT and USDT in SWAP, and you can exchange MNT for USDT. Alternatively, USDT can be converted into MNT at an equal rate to the current MNT/USDT price, and the currency allowed to be converted is not larger than the currency held</p>
+            </div>
+            <div>
+                <p class="weight">3. Add liquidity</p>
+                <p class="f18 content">You can add MNT and USDT into Liquidity LP in the same proportion in Liquidity, and the amount allowed to add into Liquidity LP is not greater than the minimum value corresponding to MNT and USDT</p>
+            </div>
+            <div>
+                <p class="weight">4. Remove liquidity</p>
+                <p class="f18 content">You can Remove any amount of added liquidity LP in Remove. After removal, LP will be reduced, and the reduced liquidity will be returned to your MNT-BEP20 and USDT-BEP20, and can be exchanged and traded again</p>
+            </div>
+            <div>
+                <p class="weight">5. Check MNT price action</p>
+                <p class="f18 content">You can view the price Trend of the last dozen MNT transactions in Trend</p>
+            </div>
+            <div>
+                <p class="weight">Information column Appendix:</p>
+                <p class="f18 content">Mnt-bep20: indicates the number of MNTS held under the current address</p>
+                <p class="f18 content">Usdt-bep20: indicates the number of USDTs held at the current address</p>
+                <p class="f18 content">LP: The amount of liquidity held at the current address</p>
+                <p class="f18 content">BNB: The number of BNBS held at the current address</p>
+                <p class="f18 content">Pool MNT: indicates the total number of pools with MNT contract addresses</p>
+                <p class="f18 content">Pool USDT: indicates the total number of pools with USDT contract addresses</p>
+                <p class="f18 content">Price: the Price of MNT to USDT</p>
+     
+            </div>
+            <div>
+                <p class="weight"> </p>
+                <p class="f18 content">In the status bar, you can view the service success status of the latest operation</p>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
