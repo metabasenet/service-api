@@ -88,11 +88,13 @@ function transfer(toAddr, amount, id) {
             let privKey = new Buffer.from(bridge_key, 'hex');
             tx.sign(privKey);
             const serializedTx = tx.serialize();
+            //console.log('hash',tx.hash(true));
             const raw = '0x' + serializedTx.toString('hex');
             web3.eth.sendSignedTransaction(raw, (err, txHash) => {
                 if (err != null) {
                     fun(err);                    
                 } else {
+                    //console.log('txHash',txHash);
                     Update(id, txHash);
                     fun(txHash);                  
                 }
