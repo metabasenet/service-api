@@ -260,7 +260,7 @@ app.get('/profit', async function (req, res, next) {
   let ret_count=await query(sql_count, [req.query.address]);
   let count = JSON.parse(JSON.stringify(ret_count[0]));
   count = Number(count["count"]);
-  let sql ="select id, vote, extend, vote + extend as balance,  height, txid, FROM_UNIXTIME(`time`,'%Y-%m-%d %H:%i:%s') as `time`  from reward where addr = ? order by height limit " + (pagenum -1) * pagesize +" , "+ pagesize;
+  let sql ="select id, vote, extend, vote + extend as balance,  height, txid, FROM_UNIXTIME(`time`,'%Y-%m-%d %H:%i:%s') as `time`  from reward where addr = ? order by height desc limit " + (pagenum -1) * pagesize +" , "+ pagesize;
   let ret=await query(sql , [req.query.address]);
   let result=[];
   for(let index =0; index <ret.length;index++){
