@@ -113,32 +113,32 @@ Again, suppose an address is voted on node 10 is  50,000   The total vote of nod
 Then the single block output reward of this address is (50,000/100,000) * 1.58 * 50%=0.395
 
 
-###### 2)DEFI Promote relationship rewards
-&emsp;&emsp;When MNT is purchased, the purchased MNT is transferred to the MNT chain and activated to form a promotion link relationship.
+###### 2)DEFI promote relationship rewards
+&emsp;&emsp;When the promoted person purchases MNT, the purchased MNT is transferred to the MNT chain, and the promotion link relationship is activated.
 &emsp;&emsp;Among them, 50 percent of the total output of the day is used to promote bonus rewards.
-&emsp;&emsp;DEFI relationships reward each block（1-6 years）： 0.79 (7-12 years is 0.395  13-18 years is 0.1975 ...）
+&emsp;&emsp;DEFI Relationship Bonus tiles (1-6 years) : 0.79(0.395 for 7-12 years, 0.1975 for 13-18 years...)
 
-###### DEFIRelational reward calculation formula
+###### DEFI relational reward calculation formula
 > A= (Ai/(A1+A2+A3+...+An)) * W * 50%
-Ai=3√ Pmax +P1+P2+P3+...+Pn
+Ai=P1+P2+P3+...+Pn
 Ai=The calculated value of promotion relationship for an address
 W=The number of blocks issued
-Pmax=The maximum amount of money held by the promotion relationship
-P=Promotion relationship holds amount
+P=The promotion relationship holds the amount multiplied by the coefficient
 
-There are three rules to promoting revenue rewards
-> ***1、The cube root of the largest number of people
-2、>200 Separate out 200×10+ excess;
-3、≤200 Direct x 10.***
+There are four rules to promoting revenue rewards
+> ***1、The balance of promoters and promotees takes the minimum value to participate in the calculation of promotion force
+2、>200，Coefficient for 1
+3、≥50 and ≤200 Coefficient for 1.5
+4、<50 Coefficient for 1***
 
-&emsp;&emsp;Suppose A recommends five people, B. C. D. E. F, respectively. B's holdings are 20,000 MNT,C is 2,000 MNT, D is 300 MNT, E is 160 MNT, and F is 120 MNT, where C is pushed to 10 Individuals, 200 MNT per person.
+&emsp;&emsp;Suppose A recommends five people, B. C. D. E. F, respectively. A holds 500 MNT, B holds 2000 MNT,C holds 1,000 MNT, D holds 300 MNT, E holds 160 MNT, F holds 30 MNT, among which C is pushed to 10 people, and each person holds 180 MNT.
 Calculate the generalized force of A according to the formula
-> Ai=3√ 20000+200 * 10 + 1800 +200 * 10 +100 +160 * 10 + 120 * 10 =27+2000+1800+2000+100+1600+1200=8727
+> Ai=500+500 + 300 +160*1.5 +30 =1570
 
 Calculate the generalized force of C according to the formula
-> Ci=10 * 200 * 10 =20000
+> Ci=10 * 180 * 1.5 =2700
 
-Since the calculation force of the whole network is the same, it is omitted. Therefore, we only need to compare the promotion calculation force of A and C to compare their earnings. Obviously, the earnings of C are more than twice that of A.
+ Since the calculation force of the whole network is the same, it is omitted. Therefore, we only need to compare the promotion calculation force of A and C to compare their earnings. Obviously, the earnings of C are more than that of A.
 
 
 
