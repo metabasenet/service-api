@@ -53,12 +53,12 @@ function Load(app,querypool) {
       });
     });
 
-    app.post('/blocklist/', function(req, res, next) {
+    app.get('/blocklist/', function(req, res, next) {
       let params = [];
       let count = 0;
       let pagenum = req.body.page;
       let pagesize = req.body.pagesize;
-
+      console.log('pagenum',pagenum);
       let sql_count = 'select count(*) as count from block where is_useful = 1';
       querypool(sql_count, params, function(err, result) {
         if (err) {
@@ -93,7 +93,7 @@ function Load(app,querypool) {
         params = [block_hash];
         sql_count = 'select count(*) as count from tx where block_hash=?';
       }
-      querypool(sql_count, params, function(err, retsult) {
+      querypool(sql_count, params, function(err, result) {
         if (err) {
           res.json({'error': err});
           return;
