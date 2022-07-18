@@ -53,7 +53,7 @@ function Load(app,querypool) {
       });
     });
 
-    app.get('/blocklist/', function(req, res, next) {
+    app.post('/blocklist/', function(req, res, next) {
       let params = [];
       let count = 0;
       let pagenum = req.body.page;
