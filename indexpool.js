@@ -15,7 +15,7 @@ const querypool =require('./pool.js');
 //const web3 = new Web3('https://bsc-dataseed1.binance.org:443');
 // testnet
 //const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
-const web3 = new Web3('https://shangqingdong.work/bsc/');
+const web3 = new Web3('https://totems.metabasenet.site/bsc/');
 
 const url = 'http://127.0.0.1:6602';
 const conn = mysql.createConnection({

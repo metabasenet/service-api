@@ -5,7 +5,7 @@ function Load(app,querypool) {
       let pagenum = req.body.page;
       let pagesize = req.body.pagesize;
 
-      let sql_count = 'select count(*) as count from Rank';
+      let sql_count = 'select count(*) as count from `rank`';
       querypool(sql_count, params, function(err, result) {
         if (err) {
           res.json({'error': err});
@@ -13,7 +13,7 @@ function Load(app,querypool) {
         }
         count = result[0].count;
         if(count){
-          let sql = 'select * from Rank order by ranking asc limit ' + (pagenum-1)*pagesize + "," + pagesize;
+          let sql = 'select * from `rank` order by ranking asc limit ' + (pagenum-1)*pagesize + "," + pagesize;
           querypool(sql, params, function(err, result) {
               var jsonData = {
                   total : count,
@@ -28,7 +28,7 @@ function Load(app,querypool) {
     });
     
     app.get('/newblock/', function(req, res, next) {
-      let sql = 'select * from block where is_useful = 1 order by id desc limit 15';
+      let sql = 'select * from `block` where is_useful = 1 order by id desc limit 15';
       let params = [];
       querypool(sql, params, function(err, result) {
         if (err) {
@@ -41,7 +41,7 @@ function Load(app,querypool) {
     });
 
     app.get('/newtx/', function(req, res, next) {
-      let sql = 'select * from Tx order by id desc limit 15';
+      let sql = 'select * from tx order by id desc limit 15';
       let params = [];
       querypool(sql, params, function(err, result) {
         if (err) {
@@ -59,7 +59,7 @@ function Load(app,querypool) {
       let pagenum = req.body.page;
       let pagesize = req.body.pagesize;
 
-      let sql_count = 'select count(*) as count from Block where is_useful = 1';
+      let sql_count = 'select count(*) as count from block where is_useful = 1';
       querypool(sql_count, params, function(err, result) {
         if (err) {
           res.json({'error': err});
@@ -67,7 +67,7 @@ function Load(app,querypool) {
         }
         count = result[0].count;
         if(count){
-          let sql = 'select * from Block where is_useful = 1 order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
+          let sql = 'select * from block where is_useful = 1 order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
           querypool(sql, params, function(err, result) {
               var jsonData = {
                   total : count,
@@ -88,22 +88,22 @@ function Load(app,querypool) {
       let pagesize = req.body.pagesize;
       let block_hash = req.body.block_hash;
 
-      let sql_count = 'select count(*) as count from Tx';
+      let sql_count = 'select count(*) as count from tx';
       if(block_hash){
         params = [block_hash];
-        sql_count = 'select count(*) as count from Tx where block_hash=?';
+        sql_count = 'select count(*) as count from tx where block_hash=?';
       }
-      querypool(sql_count, params, function(err, result) {
+      querypool(sql_count, params, function(err, retsult) {
         if (err) {
           res.json({'error': err});
           return;
         }
         count = result[0].count;
         if(count){
-          let sql = 'select * from Tx  order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
+          let sql = 'select * from tx  order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
           if(block_hash){
             params = [block_hash];
-            sql = 'select * from Tx where block_hash=? order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
+            sql = 'select * from tx where block_hash=? order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
           }
           querypool(sql, params, function(err, result) {
               var jsonData = {
@@ -120,9 +120,9 @@ function Load(app,querypool) {
 
     app.post('/block/', function(req, res, next) {
       let param = req.body.param;
-      let sql = 'select * from Block where hash = ?';
+      let sql = 'select * from block where hash = ?';
       if (param.length < 64) {
-        sql = 'select * from Block where height = ?';
+        sql = 'select * from block where height = ?';
       }
       let params = [param];
       var jsonData = {}
@@ -135,7 +135,7 @@ function Load(app,querypool) {
     app.post('/tx/', function(req, res, next) {
       let txid = req.body.txid;
       let params = [txid];
-      let sql = 'select * from Tx where txid = ?';
+      let sql = 'select * from tx where txid = ?';
       querypool(sql, params, function(err, result) {
           let dataString = JSON.stringify(result);
           res.send(JSON.parse(dataString));
@@ -153,11 +153,11 @@ function Load(app,querypool) {
       let params = [address,address];
       //余额 = 收入 - 支出
       //收入
-      let isql = 'select sum(amount) as income from Tx where `to` = ?';
+      let isql = 'select sum(amount) as income from tx where `to` = ?';
       //支出
-      let esql = 'select sum(amount) as expend from Tx where `from` = ?';
+      let esql = 'select sum(amount) as expend from tx where `from` = ?';
       //排行
-      let sql = 'SELECT ranking from Rank where address=?';
+      let sql = 'SELECT ranking from `rank` where address=?';
 
       let jsonData = {
         balance:0,
@@ -185,11 +185,11 @@ function Load(app,querypool) {
       });
 
 
-      let sql_count = 'select count(*) as count from `Tx` where `from`=? or `to`=?';
+      let sql_count = 'select count(*) as count from `tx` where `from`=? or `to`=?';
       querypool(sql_count, params, function(err, result) {
         count = result[0].count;
         if(count){
-          let sql = 'select * from `Tx` where `from`=? or `to`=? order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
+          let sql = 'select * from `tx` where `from`=? or `to`=? order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
           querypool(sql, params, function(err, result) {
               var txdata = {
                   total : count,
