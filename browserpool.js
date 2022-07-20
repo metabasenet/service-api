@@ -67,7 +67,7 @@ function Load(app,querypool) {
         }
         count = result[0].count;
         if(count){
-          let sql = 'select * from block where is_useful = 1 order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
+          let sql = 'select `block`.* , `pool`.`name` as dposName from `block` left join `pool` on `block`.reward_address = `pool`.address  where is_useful = 1 order by id desc limit ' + (pagenum-1)*pagesize + "," + pagesize;
           querypool(sql, params, function(err, result) {
               var jsonData = {
                   total : count,
