@@ -160,7 +160,7 @@ app.get('/sendtransaction', async function (req, res, next) {
 
 app.get('/listdelegate', async function (req, res, next) {
   console.log('listdelegate');
-  let sql = "SELECT address,votes,`name` FROM pool";
+  let sql = "SELECT address,votes,`name` FROM pool order by votes + 0 desc";
   let ret = await query(sql, []);
   let dataString = JSON.stringify(ret);
   res.json(JSON.parse(dataString));
