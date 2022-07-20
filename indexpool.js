@@ -160,26 +160,11 @@ app.get('/sendtransaction', async function (req, res, next) {
 
 app.get('/listdelegate', async function (req, res, next) {
   console.log('listdelegate');
-  let name ="";
-  let address ="";
-  if (req.request.name!==null && req.request.name !==undefined ){
-    name =req.request.name;
-  }
-  if (req.request.address!==null && req.request.address !==undefined ){
-    address =req.request.address;
-  }
+ 
   let sql = "SELECT address,votes,`name` FROM pool where 1=1 ";
   let sqlTail = " order by votes + 0 desc";
-  let parameter=[]
-  if(name !==""){
-    sql=sql +" and `name` =? "
-    parameter.push(name);
-  }
-  if(address !==""){
-    sql=sql +" and `address` =? "
-    parameter.push(address);
-  }
-  let ret = await query(sql +sqlTail, parameter);
+ 
+  let ret = await query(sql +sqlTail, []);
   let dataString = JSON.stringify(ret);
   res.json(JSON.parse(dataString));
 });
