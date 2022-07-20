@@ -28,7 +28,7 @@ function Load(app,querypool) {
     });
     
     app.get('/newblock/', function(req, res, next) {
-      let sql = 'select * from `block` where is_useful = 1 order by id desc limit 15';
+      let sql = 'select `block`.* , `pool`.`name` as dposName from `block` left join `pool` on `block`.reward_address = `pool`.address  where  is_useful = 1 order by id desc limit 15';
       let params = [];
       querypool(sql, params, function(err, result) {
         if (err) {
