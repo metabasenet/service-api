@@ -1,0 +1,129 @@
+<!DOCTYPE html><html><head>
+    <title>download</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="file:////home/zdw/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.6.3/node_modules/@shd101wyy/mume/dependencies/katex/katex.min.css">
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.qrcode.min.js"></script>
+    
+    <style>
+#qrcode{ 
+			margin-top:20px;
+			}
+			.main{
+				 text-align:center;
+			}
+		#downloadLink{
+			font-size:40px;
+			}
+			    .hidden {
+        display: none;
+    }
+    </style>
+      <script type="">
+        function getParameter(param) {
+             var query = window.location.search;  
+             var iLen = param.length; 
+             var iStart = query.indexOf(param); 
+             if(iStart == -1) 
+                 return "";
+             iStart += iLen + 1;
+             var iEnd = query.indexOf("&", iStart);   
+             if(iEnd == -1) 
+                 return query.substring(iStart);
+             return query.substring(iStart, iEnd); 
+         }
+       
+         function clickGenealogy(fruit) {
+				
+				var qrcode = $('#qrcode').qrcode({
+					width: 512,
+					height: 512,
+					text: "https://browser.metabasenet.site/file/"+fruit+".apk",
+					 image:$('#myLogo')[0],//logo图片
+					//src:'baidu.png.png'
+				});
+			}
+			function downloadClick () {
+			    var canvas = $('#qrcode canvas')[0];
+			    url = canvas.toDataURL('image/png');
+			    // 构造a标签并模拟点击
+			    var downloadLink = $('#downloadLink').attr("href", url).attr("download", "二维码.png");
+			    downloadLink[0].click();
+			  }
+			function downloadClick () {
+				// 获取base64的图片节点
+				var img = document.getElementById('qrcode').getElementsByTagName('img')[0];
+				// 构建画布
+				var canvas = document.createElement('canvas');
+				canvas.width = img.width;
+				canvas.height = img.height;
+				canvas.getContext('2d').drawImage(img, 0, 0);
+				// 构造url
+				url = canvas.toDataURL('image/png');
+				// 构造a标签并模拟点击
+				var downloadLink = document.getElementById('downloadLink');
+				downloadLink.setAttribute('href', url);
+				downloadLink.setAttribute('download', '二维码.png');
+				downloadLink.click();
+			  }
+			  //jquery
+			  function downloadClick () {
+				// 获取base64的图片节点
+				var img = $('#qrcode img')[0];
+				// 构建画布
+				var canvas = document.createElement('canvas');
+				canvas.width = img.width;
+				canvas.height = img.height;
+				canvas.getContext('2d').drawImage(img, 0, 0);
+				// 构造url
+				url = canvas.toDataURL('image/png');
+				// 构造a标签并模拟点击
+				var downloadLink = $('#downloadLink').attr("href", url).attr("download", "二维码.png");
+				downloadLink[0].click();
+			  }
+ 
+			window.onload=function(){
+             var language = getParameter("language");
+             var fruits=getParemeter("fruits");
+             if (language =='zh'){document.getElementById("chinese").style.display='block';}
+             if (language =='en'){document.getElementById("english").style.display='block';}
+             var  fruit='orange';
+             document.getElementById("downloadLink").setAttribute("href","https://browser.metabasenet.site/file/"+fruit+".apk")
+             document.getElementById("downloadLink").setAttribute("text","https://browser.metabasenet.site/file/"+fruit+".apk")
+             document.getElementById("downloadtitle").setAttribute("text", fruit)
+             clickGenealogy(fruit);
+            } 
+
+					function addimage(){
+						$("#qrcode")[0].getContext('2d').drawImage($("#myLogo")[0], (qrWidth - logoQrWidth) / 2, (qrHeight - logoQrHeight) / 2, logoQrWidth, logoQrHeight);
+					}
+			
+
+</script>
+  </head>
+  <body for="html-export">
+    <div class="main">
+        <div id="chinese"  class="main-div">
+            <div class="main">
+				<h2><span id ="downloadtitle">orange</span> apk 下载</h2>
+            <!--<button type="button" onclick="addimage()">二维码</button>
+                        <button type="button" onclick="downloadClick()">下载</button>-->
+               <h3>用微信扫描二维码，用浏览器打开，即可下载apk</h3>
+                        <a id="downloadLink" href="https://browser.metabasenet.site/file/orange.apk">https://browser.metabasenet.site/file/orange.apk</a>
+                    <img src="baidu.png" id ="myLogo" class="hidden"/>
+                    
+            </div>
+        </div>
+        <div id="english"  class="main-div">
+        
+        </div>
+        <div>
+            <div id="qrcode"></div>
+
+
+        </div>
+    </div>
+  </body></html>
