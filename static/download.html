@@ -21,6 +21,7 @@
 			    .hidden {
         display: none;
     }
+    .main-div{padding:0 0.6rem; display:none;}
     </style>
       <script type="">
         function getParameter(param) {
@@ -39,10 +40,10 @@
          function clickGenealogy(fruit) {
 				
 				var qrcode = $('#qrcode').qrcode({
-					width: 512,
-					height: 512,
-					text: "https://browser.metabasenet.site/file/"+fruit+".apk",
-					 image:$('#myLogo')[0],//logo图片
+					width: 256,
+					height: 256,
+					text: "https://browser.metabasenet.site/api/file/"+fruit+".apk",
+					 
 					//src:'baidu.png.png'
 				});
 			}
@@ -88,12 +89,39 @@
 			window.onload=function(){
              var language = getParameter("language");
              var fruits=    getParameter("fruits");
-             if (language =='zh'){document.getElementById("chinese").style.display='block';}
-             if (language =='en'){document.getElementById("english").style.display='block';}
-             var  fruit='orange';
-             document.getElementById("downloadLink").setAttribute("href","https://browser.metabasenet.site/file/"+fruit+".apk")
-             document.getElementById("downloadLink").setAttribute("text","https://browser.metabasenet.site/file/"+fruit+".apk")
-             document.getElementById("downloadtitle").setAttribute("text", fruit)
+             document.getElementById("chinese").style.display='block';
+              
+             //if (language =='en'){document.getElementById("english").style.display='block';}
+             
+             var  fruit=fruits;
+            //  var downloadLink =document.getElementsByName("downloadLink")
+
+            //  for(var x=0;x<=downloadLink.length;x++){
+            //     downloadLink[x].href ="https://browser.metabasenet.site/api/file/"+fruit+".apk";
+                
+            //     downloadLink[x].innerHTML="https://browser.metabasenet.site/api/file/"+fruit+".apk";
+            //     }
+            //   var downloadtitle=  document.getElementsByName("downloadtitle")
+
+            //  for(var x=0;x<=downloadtitle.length;x++){               
+            //     downloadtitle[x].innerText=fruit;
+            //  }
+            document.getElementById("downloadLink").innerHTML="https://browser.metabasenet.site/api/file/"+fruit+".apk";
+            document.getElementById("downloadLink").setAttribute("href","https://browser.metabasenet.site/api/file/"+fruit+".apk")
+            if (language =='zh'){
+              
+                document.getElementById("downloadtitle").innerHTML= fruit +" apk 下载";
+                document.getElementById("wechatscan").innerHTML="用推特，脸书，电报，微信等扫描二维码，用浏览器打开，即可下载apk";
+            }
+            if (language =='en'){
+                 
+                document.getElementById("downloadtitle").innerHTML= fruit +" apk download";
+                document.getElementById("wechatscan").innerHTML="Scan the QR code with twitter,facebook,telegram,wechat,etc and open it with a browser to download APK";
+            }
+             //.setAttribute("href","https://browser.metabasenet.site/api/file/"+fruit+".apk")
+            //  downloadLink.href=
+            //  document.getElementById("downloadLink").innerText("https://browser.metabasenet.site/api/file/"+fruit+".apk")
+            
              clickGenealogy(fruit);
             } 
 
@@ -108,17 +136,17 @@
     <div class="main">
         <div id="chinese"  class="main-div">
             <div class="main">
-				<h2><span id ="downloadtitle">orange</span> apk 下载</h2>
-            <!--<button type="button" onclick="addimage()">二维码</button>
-                        <button type="button" onclick="downloadClick()">下载</button>-->
-               <h3>用微信扫描二维码，用浏览器打开，即可下载apk</h3>
-                        <a id="downloadLink" href="https://browser.metabasenet.site/file/orange.apk">https://browser.metabasenet.site/file/orange.apk</a>
-                    <img src="baidu.png" id ="myLogo" class="hidden"/>
-                    
+			    <h2><span id ="downloadtitle"  name ="downloadtitle">orange apk 下载</span></h2>   
+                <h3><span id ="wechatscan"  name ="wechatscan">用推特，脸书，电报，微信等扫描二维码，用浏览器打开，即可下载apk</span></h3>
+                <a id="downloadLink" name ="downloadLink" href="https://browser.metabasenet.site/api/file/orange.apk"></a>
             </div>
         </div>
         <div id="english"  class="main-div">
-        
+            <div class="main">
+			    <h2><span id ="downloadtitleen"  name ="downloadtitleen">orange</span> apk download</h2>   
+                <h3>Scan the QR code with twitter,facebook,telegram,wechat,etc and open it with a browser to download APK</h3>
+                <a id="downloadLinken" name ="downloadLinken" href="https://browser.metabasenet.site/api/file/orange.apk"></a>
+            </div>
         </div>
         <div>
             <div id="qrcode"></div>

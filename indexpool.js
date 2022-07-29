@@ -68,7 +68,7 @@ function chain_method(method, params) {
 // http://127.0.0.1:7711/quotations
 app.get('/quotations', async function (req, res, next) {
   console.log('quotations');
-  let sql = 'SELECT tradePairId,price,`precision`,price24h FROM quotations';
+  let sql = 'SELECT tradePairId,price,`precision`,price24h FROM quotations where id =1';
   let ret = await query(sql, [req.query.walletId]);
   let dataString = JSON.stringify(ret);
   res.json(JSON.parse(dataString));
