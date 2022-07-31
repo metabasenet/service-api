@@ -183,7 +183,17 @@ app.get('/listdelegate', async function (req, res, next) {
   let dataString = JSON.stringify(ret);
   res.json(JSON.parse(dataString));
 });
-
+app.get('/getRewardCountByAddress',async function(req,res,next){
+  let sql ="select sum(profit)  as count from  rewarddetail where addr =?   order by height desc limit 7";
+  let ret=await query(sql,[req.query.address]);
+  let json=JSON.parse(JSON.stringify(ret[0]));
+  count=Number(json["count"])
+  var txdata={
+    total:count,
+    address:req.query.address
+  }
+  res.json(txdata)
+})
 
 
 app.get('/listdelegatedetail', async function (req, res, next) {
@@ -280,8 +290,8 @@ app.get('/profit', async function (req, res, next) {
   let ret_count=await query(sql_count, [req.query.address]);
   let count = JSON.parse(JSON.stringify(ret_count[0]));
   count = Number(count["count"]);
-  let sql ="select id, vote, extend, vote + extend as balance,  height, txid, FROM_UNIXTIME(`time`,'%Y-%m-%d %H:%i:%s') as `time`  from reward where addr = ? order by height desc limit " + (pagenum -1) * pagesize +" , "+ pagesize;
-  let ret=await query(sql , [req.query.address]);
+  let sql ="select id, vote, extend, vote + extend as balance,  height, txid, FROM_UNIXTIME(`time`,'%Y-%m-%d %H:%i:%s') as `time`, addr  from reward where addr in (?) order by height desc limit " + (pagenum -1) * pagesize +" , "+ pagesize;
+  let ret=await query(sql , [req.query.address.split(",")]);
   let result=[];
   for(let index =0; index <ret.length;index++){
      let reward={
@@ -291,6 +301,7 @@ app.get('/profit', async function (req, res, next) {
        height:ret[index].height.toString(),
        txid:ret[index].txid.toString(),
        time:ret[index].time.toString(),
+       addr:ret[index].addr.toString(),
      }
      result.push(reward);
   }
