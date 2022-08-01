@@ -9,3 +9,5 @@
 最近7天收益：此数据描述的是该地址和其推广的子孙后代地址近7天投票收益和推广收益的总和，不是本地址近7天收益总和
 交易：为该网址的交易明细列表
 推广关系：为该地址的推广关系列表
+<img src="img/queryAddress1.png" style="margin-top:20px;"/>
+<img src="img/queryAddress2.png" style="margin-top:20px;"/>
