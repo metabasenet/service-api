@@ -15,4 +15,5 @@ B的收益率为 20/(10+20+30)=33%
 C的收益率为 30/(10+20+30)=50%
 然后根据每人的收益率计算收益即可
 <img src="img/queryAddress1.png" style="margin-top:20px;"/>
-<img src="img/queryAddress2.png" style="margin-top:20px;"/>
+<hr />
+<img src="img/queryAddress2.png" style="margin-top:30px;"/>
