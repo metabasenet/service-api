@@ -168,7 +168,7 @@ app.get('/listdelegate', async function (req, res, next) {
   if (Object.keys(req.query).indexOf("address")>=0){
     address =req.query.address;
   }
-  let sql = "SELECT address,votes,`name` FROM pool where 1=1 ";
+  let sql = "SELECT address,votes,`name`,vote_count FROM pool where 1=1 ";
   let sqlTail = " order by votes + 0 desc";
   let parameter=[]
   if(name !==""){
