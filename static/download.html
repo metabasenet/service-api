@@ -22,6 +22,13 @@
         display: none;
     }
     .main-div{padding:0 0.6rem; display:none;}
+    #codeico{
+            position:absolute;
+            z-index:9999999;
+            width:30px; 
+            height:30px;
+            background:url("img/apple.png") no-repeat;
+        }
     </style>
       <script type="">
         function getParameter(param) {
@@ -42,10 +49,11 @@
 				var qrcode = $('#qrcode').qrcode({
 					width: 256,
 					height: 256,
-					text: "https://browser.metabasenet.site/api/file/"+fruit+".apk",
-					 
-					//src:'baidu.png.png'
+					text: "https://browser.metabasenet.site/api/file/"+fruit+".apk",					 
+					//src:'./baidu.png'
 				});
+                var margin = ($("#qrcode").height()-$("#codeico").height())/2;
+                    $("#codeico").css("margin",margin);
 			}
 			function downloadClick () {
 			    var canvas = $('#qrcode canvas')[0];
@@ -108,22 +116,71 @@
             //  }
             document.getElementById("downloadLink").innerHTML="https://browser.metabasenet.site/api/file/"+fruit+".apk";
             document.getElementById("downloadLink").setAttribute("href","https://browser.metabasenet.site/api/file/"+fruit+".apk")
+
+
+            
+            let fruitName=getFruitName(fruit);
+            document.getElementById("codeico").setAttribute("src","img/"+fruitName+".png")
             if (language =='zh'){
               
-                document.getElementById("downloadtitle").innerHTML= fruit +" apk 下载";
+                document.getElementById("downloadtitle").innerHTML= fruitName +".apk 下载";
                 document.getElementById("wechatscan").innerHTML="浏览器扫描，下载apk";
             }
             if (language =='en'){
                  
-                document.getElementById("downloadtitle").innerHTML= fruit +" apk download";
+                document.getElementById("downloadtitle").innerHTML= fruitName +".apk download";
                 document.getElementById("wechatscan").innerHTML="Scan the QR code with browser to download APK";
             }
              //.setAttribute("href","https://browser.metabasenet.site/api/file/"+fruit+".apk")
             //  downloadLink.href=
             //  document.getElementById("downloadLink").innerText("https://browser.metabasenet.site/api/file/"+fruit+".apk")
             
-             clickGenealogy(fruit);
+        
+            clickGenealogy(fruit);
             } 
+
+ 
+ 
+            function getFruitName(fruit){
+                let fruitName=""
+                switch (fruit) {
+                    case "6vck39eqn4":
+                        fruitName="orange";   
+                        break;
+                    case "by9mzrzbvc":
+                        fruitName="durian";   
+                        break;    
+                    case "kdee9q2bga":
+                        fruitName="chestnut";   
+                        break;   
+                        
+                    case "grhwakytzm":
+                        fruitName="lemon";   
+                        break; 
+
+                    case "y6xcspf2qg":
+                        fruitName="watermelon";   
+                        break;  
+                    case "zk4z6m2e5p":
+                        fruitName="noni";   
+                        break;  
+                    case "jc929mqc9c":
+                        fruitName="apple";   
+                        break;   
+                    case "q05m1gxy1t":
+                        fruitName="passionfruit";   
+                        break;   
+                    case "z04kqc1tdc":
+                        fruitName="pitaya";   
+                        break;   
+                    case "longgan":
+                        fruitName="je35j110c4";   
+                        break;
+                    default:
+                        break;
+                }
+                return fruitName;
+            }
 
 					function addimage(){
 						$("#qrcode")[0].getContext('2d').drawImage($("#myLogo")[0], (qrWidth - logoQrWidth) / 2, (qrHeight - logoQrHeight) / 2, logoQrWidth, logoQrHeight);
@@ -134,6 +191,7 @@
   </head>
   <body for="html-export">
     <div class="main">
+       
         <div id="chinese"  class="main-div">
             <div class="main">
 			    <h2><span id ="downloadtitle"  name ="downloadtitle">orange apk 下载</span></h2>   
@@ -149,7 +207,7 @@
             </div>
         </div>
         <div>
-            <div id="qrcode"></div>
+            <div id="qrcode"><img id="codeico" src="img/apple.png" /></div>
 
 
         </div>

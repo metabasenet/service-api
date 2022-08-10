@@ -141,7 +141,8 @@ function Load(app,querypool) {
           res.send(JSON.parse(dataString));
       });
     });
-  
+    
+    //app.post("updateAppVersion")
     app.post('/address/', function(req, res, next) {
       let address = req.body.address;
       var count = 0;
