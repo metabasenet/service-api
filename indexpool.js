@@ -443,6 +443,108 @@ app.get("/defi_relation", async function(req,res,next){
   let dataString =JSON.stringify(ret);
   res.json(JSON.parse(dataString));  
 })
+app.post("/deleteAppVersionById", async function(req,res,next){
+  let sql="delete from app_version where id=?";
+  let ret=await query(sql,[req.body.id]);
+  let result={
+    info:"删除成功",
+  }
+  res.send(result);
+})
+app.get("/appVersionMaxCode",async function(req,res,next){
+  let sql="select * from app_version where version_code =(select max(version_code) from app_version)";
+  let ret=await query(sql);
+  let appVersion={};
+  if (ret.length ===1){
+    appVersion={
+      id:ret[0].id,
+      createTime:ret[0].create_time,
+      updateTime:ret[0].update_time,
+      versionCode:ret[0].version_code,
+      versionName:ret[0].version_name,
+      updateLog:ret[0].update_log,
+      apkUrl:ret[0].apk_url,
+      token:ret[0].token,
+    }
+  }
+  res.send(appVersion);
+
+})
+app.get("/appVersionById",async function(req,res,next){
+  let sql="select * from app_version where id =?";
+  let ret=await query(sql, [req.query.id]);
+  let appVersion={};
+  if (ret.length ===1){
+    appVersion={
+      id:ret[0].id,
+      createTime:ret[0].create_time,
+      updateTime:ret[0].update_time,
+      versionCode:ret[0].version_code,
+      versionName:ret[0].version_name,
+      updateLog:ret[0].update_log,
+      apkUrl:ret[0].apk_url,
+      token:ret[0].token,
+    }
+  }
+  res.send(appVersion);
+
+})
+app.get("/allAppVersion",async function(req,res,next){
+  let sql="select * from app_version order by version_code desc"
+  let ret=await query(sql);
+  let appVersions=[]
+
+  for(let index =0; index <ret.length; index++ ){
+    let appVersion={
+      id:ret[index].id,
+      createTime:ret[index].create_time,
+      updateTime:ret[index].update_time,
+      versionCode:ret[index].version_code,
+      versionName:ret[index].version_name,
+      updateLog:ret[index].update_log,
+      apkUrl:ret[index].apk_url,
+      token:ret[index].token,
+    }
+    appVersions.push(appVersion);
+  }
+  res.send(appVersions);
+})
+app.post("/updateAppVersion", async function(req,res,next){
+  
+  let token="12wx2gmtvy0nbxrpqqh875dwzh2mmpggnm6rfcn4jqarepnwf2tkmsmfaE4B79A36EFB9F17DF7E3BB161F9BCFD8";
+  let info="";
+  let success=true;
+  if (Object.keys(req.body).indexOf("appversion")<0){
+    info="failure";
+    success=false;
+  }
+  if(success){
+    if(req.body.appversion.token !==token){
+      info="token failure";
+      success=false;
+    }
+  }
+  if(success){
+    let selectSql="select *  from app_version where version_code =?";
+    let selectRet=await query(selectSql,[req.body.appversion.versionCode])
+    if(selectRet.length ===1){
+      let updateSql="update app_version set update_time =? , version_name=?, update_log=? , apk_url=?, token=? where version_code =?";
+      await query(updateSql,[req.body.appversion.updateTime, req.body.appversion.versionName,req.body.appversion.updateLog,req.body.appversion.apkUrl,req.body.appversion.token,req.body.appversion.versionCode]);
+      info="update success";
+    }else{
+      let insertSql="insert into app_version (create_time, update_time, version_code, version_name,update_log,apk_url,token) values(?,?,?,?,?,?,?)";
+      let insertRet=await query(insertSql,[req.body.appversion.updateTime,req.body.appversion.updateTime,req.body.appversion.versionCode,req.body.appversion.versionName,req.body.appversion.updateLog,req.body.appversion.apkUrl,req.body.appversion.toten])
+      info="insert success";
+      console.log(insertRet);
+    }
+  }
+  console.log(req.body.appversion);
+  
+  let result={
+    info:info,
+  }
+  res.send(result);
+})
 
 let server = app.listen(7711, function () {
   let host = server.address().address;
