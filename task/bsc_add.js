@@ -107,6 +107,7 @@ async function Run() {
         },
       ).then(function(events) {
             for (const obj of events) {
+                console.log('obj',obj);
                 Add(obj.transactionHash,obj.returnValues["0"],obj.returnValues["2"],obj.blockNumber);
             }
             // 5s
