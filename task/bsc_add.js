@@ -2,7 +2,8 @@ const Web3 = require('web3');
 const mysql  = require('mysql');  
  
 const mnt_addr = '0x450af0a7c8372eee72dd2e4833d9aac4928c151f';
-const bridge_addr = '0x0873093DEb492A6425d85906E2CE6E856BCDC71F';
+//const bridge_addr = '0x0873093DEb492A6425d85906E2CE6E856BCDC71F';
+const bridge_addr = '0x08f9BA8014Ba6f2150287F778f03E9aE6b1FF398';
 
 const config ={     
     host     : '127.0.0.1',       
@@ -66,7 +67,8 @@ function Add(txid,from,value,blockNumber) {
 //const web3 = new Web3('https://bsc-dataseed1.binance.org:443');
 // testnet
 //const web3 = new Web3('https://data-seed-prebsc-2-s3.binance.org:8545');
-const web3=new Web3('https://shangqingdong.work/bsc/');
+//const web3=new Web3('https://shangqingdong.work/bsc/');
+const web3=new Web3('https://totems.metabasenet.site/bsc/');
 const abi = [{
 	"anonymous": false,
 	"inputs": [{
