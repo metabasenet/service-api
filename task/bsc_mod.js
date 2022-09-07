@@ -9,7 +9,7 @@ let moment= require('moment');
 // testnet
 //const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
 //const web3=new Web3('https://shangqingdong.work/bsc/');
-const web3=new Web3('https://shangqingdong.work/bsc/');
+const web3=new Web3('https://totems.metabasenet.site/bsc/');
 const abi = [
     {
         "constant": false,
