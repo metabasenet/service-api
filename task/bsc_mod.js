@@ -34,7 +34,8 @@ const abi = [
     }];
 
 
-const mnt_addr = '0x450af0a7c8372eee72dd2e4833d9aac4928c151f';
+//const mnt_addr = '0x450af0a7c8372eee72dd2e4833d9aac4928c151f'; test
+const mnt_addr='0xeE726C4e6DEcA848fdFEA0e0dCb3A8d4f343E047';
 //const bridge_addr = '0x0873093DEb492A6425d85906E2CE6E856BCDC71F';
 const bridge_addr = '0x08f9BA8014Ba6f2150287F778f03E9aE6b1FF398';
 //const bridge_key = '0x589dac19a0225798be3848586132e9bb22bf2ecdd7c55240e9e3106ebda6e53f';
@@ -83,9 +84,10 @@ function transfer(toAddr, amount, id) {
                 gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'Gwei')),
                 to: mnt_addr,
                 data: con.methods.transfer(toAddr, web3.utils.toHex(web3.utils.toWei(amount.toString(), 'ether'))).encodeABI()    // if bnb ,not need send.
-            }           
-            //56
-            const BSC_MAIN = Common.forCustomChain('mainnet', { name: 'bnb', networkId: 97, chainId: 97 }, 'petersburg');
+            } 
+     
+            //56 is main ,  97 is test
+            const BSC_MAIN = Common.forCustomChain('mainnet', { name: 'bnb', networkId: 56, chainId: 56 }, 'petersburg');
             const tx = new Tx(txObject, { common: BSC_MAIN });
             let privKey = new Buffer.from(bridge_key, 'hex');
             tx.sign(privKey);
@@ -94,6 +96,7 @@ function transfer(toAddr, amount, id) {
             const raw = '0x' + serializedTx.toString('hex');
             web3.eth.sendSignedTransaction(raw, (err, txHash) => {
                 if (err != null) {
+                    console.log(err)
                     fun(err);                    
                 } else {
                     //console.log('txHash',txHash);
@@ -111,7 +114,8 @@ function Run(txid, from, value) {
     conn.query(sql, async function (error, results, fields) {
         if (error) throw error;
         for (const obj of results) {
-            await transfer(obj.to, obj.value, obj.id);
+            //console.log(obj)
+           await transfer(obj.to, obj.value, obj.id);
         }
         setTimeout(Run, 5000);
         

@@ -1,7 +1,8 @@
 const Web3 = require('web3');
 const mysql  = require('mysql');  
  
-const mnt_addr = '0x450af0a7c8372eee72dd2e4833d9aac4928c151f';
+//const mnt_addr = '0x450af0a7c8372eee72dd2e4833d9aac4928c151f'; test
+const mnt_addr='0xeE726C4e6DEcA848fdFEA0e0dCb3A8d4f343E047';
 //const bridge_addr = '0x0873093DEb492A6425d85906E2CE6E856BCDC71F';
 const bridge_addr = '0x08f9BA8014Ba6f2150287F778f03E9aE6b1FF398';
 
