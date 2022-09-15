@@ -6,7 +6,8 @@ const BigNumber = require('bignumber.js');
 //const web3 = new Web3('https://bsc-dataseed1.binance.org:443');
 // testnet
 //const web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545');
-const web3=new Web3('https://shangqingdong.work/bsc/');
+//const web3=new Web3('https://shangqingdong.work/bsc/');
+const web3=new Web3('https://totems.metabasenet.site/bsc/');
 
 const abi = [{
 	"anonymous": false,
@@ -26,12 +27,14 @@ const abi = [{
 }];
 
 
-const lp_addr = '0x82260d3f8c98e90a4ec0dcf709e2ad8f592ea941';
+//const lp_addr = '0x82260d3f8c98e90a4ec0dcf709e2ad8f592ea941';
+const lp_addr = '0x72E5080Ea8b8878A78f0C83e375c2b86d4D92Bc1';
+
 
 const lp_con = new web3.eth.Contract(abi,lp_addr);
 
-const begin_height = 18580240;
-
+//const begin_height = 18580240;
+const begin_height=21284708;
 let height = 0;
 let height_setup = 5000;
 
