@@ -545,7 +545,21 @@ app.post("/updateAppVersion", async function(req,res,next){
   }
   res.send(result);
 })
+app.get("/getReportAddr",async function(req,res,next){
+  let sql=" select addr, owner, balance from report_addr where owner =?"
+  let ret=await query(sql,[req.query.addr]);
+  let reportAddrs=[]
 
+  for(let index =0; index <ret.length; index++ ){
+    let reportAddr={
+      addr:ret[index].addr,
+      owner:ret[index].owner,
+      balance:ret[index].balance, 
+    }
+    reportAddrs.push(reportAddr);
+  }
+  res.send(reportAddrs);
+})
 let server = app.listen(7711, function () {
   let host = server.address().address;
   let port = server.address().port;
