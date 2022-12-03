@@ -547,7 +547,7 @@ app.post("/updateAppVersion", async function(req,res,next){
 })
 app.get("/getReportAddr",async function(req,res,next){
   let sql=" select addr, owner, balance from report_addr where owner =?"
-  let ret=await query(sql,[req.query.addr]);
+  let ret=await query(sql,[req.query.address]);
   let reportAddrs=[]
 
   for(let index =0; index <ret.length; index++ ){
