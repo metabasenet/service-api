@@ -7,7 +7,7 @@ import { query } from '../lib.js'
 const router = Router()
 
 router.get('/new', async (ctx, next) => {
-    const ret = await query('SELECT `number`,`hash`,`timestamp`,txns,reward FROM `block` order by `number` desc limit 10', [])
+    const ret = await query('SELECT `number`,`hash`,`timestamp`,txns,reward FROM `block` order by `number` desc limit 12', [])
     ctx.body = ret
 })
 

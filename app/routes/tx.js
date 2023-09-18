@@ -5,7 +5,7 @@ import moment from 'moment'
 const router = Router()
 
 router.get('/new', async (ctx, next) => {
-    const ret = await query('SELECT tx.`hash`,tx.`from`,tx.`to`,`block`.`timestamp` FROM tx inner join `block` on `block`.`number` = tx.`number` order by tx.id desc limit 10', [])
+    const ret = await query('SELECT tx.`hash`,tx.`from`,tx.`to`,`block`.`timestamp` FROM tx inner join `block` on `block`.`number` = tx.`number` order by tx.id desc limit 12', [])
     ctx.body = ret
 })
 
