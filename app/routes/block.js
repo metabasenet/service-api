@@ -11,4 +11,16 @@ router.get('/new', async (ctx, next) => {
     ctx.body = ret
 })
 
+router.get('/total', async (ctx, next) => {
+    const ret = await query('SELECT max(`number`) as total FROM `block`', [])
+    ctx.body = ret[0]
+})
+
+
+router.get('/:number', async (ctx, next) => {
+    const number = ctx.params.number
+    const ret = await query('SELECT `number`,`hash`,`timestamp`,txns,reward FROM `block` where `number` < ? order by `number` desc limit 12', [number])
+    ctx.body = ret
+})
+
 export default router
