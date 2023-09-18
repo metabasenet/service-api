@@ -1,26 +1,43 @@
 {
-  "name": "web_api",
+  "name": "mnt-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cross-env NODE_ENV=production ./node_modules/.bin/nodemon babel-node ./server.js",
+    "dev": "cross-env NODE_ENV=development nodemon app/server.js",
+    "test": "cross-env NODE_ENV=test ./node_modules/.bin/nodemon ./index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git@gitee.com:shangqingdong/web_api.git"
+    "url": "git@github.com:metabasenetwork/mnt.git"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bignum": "^0.13.1",
-    "blakejs": "^1.2.1",
-    "ethereumjs-common": "^1.5.2",
-    "ethereumjs-tx": "^2.1.2",
-    "express": "^4.17.3",
-    "moment": "^2.29.3",
+    "axios": "^1.4.0",
+    "bignumber.js": "^9.1.1",
+    "ethereumjs-util": "^7.1.5",
+    "ethers": "^6.7.1",
+    "koa": "^2.14.2",
+    "koa-bodyparser": "^4.4.0",
+    "koa-convert": "^2.0.0",
+    "koa-cors": "^0.0.16",
+    "koa-logger": "^3.2.1",
+    "koa-onerror": "^4.2.0",
+    "koa-router": "^12.0.0",
+    "koa-send": "^5.0.1",
+    "koa-static": "^5.0.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "mysql": "^2.18.1",
     "request": "^2.88.2",
-    "web3": "^1.7.3"
+    "string-format": "^2.0.0",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.22"
   }
 }
