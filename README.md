@@ -30,4 +30,8 @@ sudo dpkg -i ***.dev
 ```bash
 yarn
 yarn start
+
+ssh -4NfL 3306:127.0.0.1:3306 mnt-xg2
+ssh -4NfL 7545:127.0.0.1:7545 mnt-xg2
+
 ```
