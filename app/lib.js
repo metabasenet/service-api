@@ -1,6 +1,7 @@
 import mysql from 'mysql'
 import moment from 'moment'
 import config from '../config/config.js'
+import { ethers } from 'ethers'
 
 let connection = mysql.createConnection(config.database)
 
@@ -39,4 +40,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export { query, sleep }
+
+const provider = new ethers.JsonRpcProvider('http://127.0.0.1:7545')
+
+export { query, sleep, provider}
