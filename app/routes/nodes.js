@@ -6,7 +6,7 @@ import { query, provider } from '../lib.js'
 const router = Router()
 
 router.get('/list', async (ctx, next) => {
-    const sql = 'select nodes.addr,nodes.`name`,nodes.state, ifnull(A.s,0) as s from mnt.nodes left join (SELECT addr,sum(value) as s FROM mnt.logs where type = 2 group by addr) A on A.addr = nodes.addr'
+    const sql = 'select nodes.addr,nodes.`name`,nodes.state, ifnull(A.s,0) as s from mnt.nodes left join (SELECT addr,sum(value) as s FROM mnt.logs where type = 2 group by addr) A on A.addr = nodes.addr order by s desc'
     const ret = await query(sql, [])
     ctx.body = ret
 })
