@@ -29,7 +29,7 @@ async function Transaction(transactionHash) {
     if (tx.value > 0n) {
       await query('call add_transfer(?,?,?,?,?,?)', [transactionHash, -1, ret.from, ret.to, ethers.formatEther(tx.value), ''])
     }
-
+    const utc = (await provider.getBlock(ret.blockNumber)).timestamp;
     const result = await provider.send('debug_traceTransaction', [transactionHash]);
     for (let i = 0; i < result.structLogs.length; i++) {
       if (result.structLogs[i].op == 'CALL') {
@@ -41,7 +41,7 @@ async function Transaction(transactionHash) {
         const in_size = result.structLogs[i].stack[l - 5];
         if (in_size == 0 && gas == 0) {
           console.log(value, to);
-          await query('call add_transfer(?,?,?,?,?,?)', [transactionHash, i, from, to, value, ''])
+          await query('call add_transfer(?,?,?,?,?,?,?)', [transactionHash, i, from, to, value, '',utc])
         }
       }
     }

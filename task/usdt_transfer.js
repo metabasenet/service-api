@@ -29,6 +29,7 @@ function query(sql, params) {
     })
 }
 
+/*
 function subscribe() {
     usdt.on('Transfer', async (from, to, value, event) => {
         const txid = event.transactionHash;
@@ -38,6 +39,7 @@ function subscribe() {
         await query('call add_transfer(?,?,?,?,?,?)', [txid, txid_index, from, to, value, usdt_addr])
     })
 }
+*/
 
 async function sync(bn0, bn1) {
     const transfer_logs = await usdt.queryFilter(usdt.filters.Transfer(), bn0, bn1)
@@ -48,13 +50,14 @@ async function sync(bn0, bn1) {
         const from = coder.decode(['address'], log.topics[1])[0]
         const to = coder.decode(['address'], log.topics[2])[0]
         const value = ethers.formatEther(coder.decode(['uint256'], log.data)[0])
+        const utc = (await provider.getBlock(log.blockNumber)).timestamp
         console.log(from, to, value)
-        await query('call add_transfer(?,?,?,?,?,?)', [txid, txid_index, from, to, value, usdt_addr])
+        await query('call add_transfer(?,?,?,?,?,?,?)', [txid, txid_index, from, to, value, usdt_addr, utc])
     }
 }
 
 async function task() {
-    const data = await query('SELECT `hash` FROM erc20transfer order by id desc limit 1;', [])
+    const data = await query('SELECT `hash` FROM erc20transfer order by id desc limit 1', [])
     //console.log(config.wgt_addr)
     let bn = 0;
     if (data.length > 0) {
