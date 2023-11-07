@@ -29,6 +29,16 @@ web3.eth.currentProvider.send(
     }
   );
 
+  web3.currentProvider.sendAsync({
+    method: "debug_traceTransaction",
+    params: ['0x3fac854179691e377fc1aa180b71a4033b6bb3bde2a7ef00bc8e78f849ad356e', {}],
+    jsonrpc: "2.0",
+    id: "2"
+  }, function (err, result) {
+    console.log(err)
+    console.log(result)
+  });
+  
 /*
 web3.eth.getTransaction(transactionHash, (error, transaction) => {
     //console.log('ddd')
@@ -46,3 +56,6 @@ web3.eth.getTransaction(transactionHash, (error, transaction) => {
     console.error('Error fetching transaction:', error);
   }
 });*/
+
+
+

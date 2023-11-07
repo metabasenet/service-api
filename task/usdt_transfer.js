@@ -30,10 +30,10 @@ function query(sql, params) {
 function subscribe() {
     usdt.on('Transfer', async (from, to, value, event) => {
         const txid = event.transactionHash;
-        const txid_index = log.transactionIndex
+        const txid_index = event.transactionIndex
         value = ethers.formatEther(value)
         console.log(from, to, value)
-        await query('call add_transfer(?,?,?,?,?,?)',[txid,txid_index,from,to,value,usdt_addr])
+        await query('call add_transfer(?,?,?,?,?,?)', [txid, txid_index, from, to, value, usdt_addr])
     })
 }
 
@@ -47,7 +47,7 @@ async function sync(bn0, bn1) {
         const to = coder.decode(['address'], log.topics[2])[0]
         const value = ethers.formatEther(coder.decode(['uint256'], log.data)[0])
         console.log(from, to, value)
-        await query('call add_transfer(?,?,?,?,?,?)',[txid,txid_index,from,to,value,usdt_addr])
+        await query('call add_transfer(?,?,?,?,?,?)', [txid, txid_index, from, to, value, usdt_addr])
     }
 }
 
