@@ -57,7 +57,7 @@ async function sync(bn0, bn1) {
 }
 
 async function task() {
-    const data = await query('SELECT `hash` FROM erc20transfer order by id desc limit 1', [])
+    const data = await query("SELECT `hash` FROM erc20transfer where erc20_addr != '' order by id desc limit 1", [])
     //console.log(config.wgt_addr)
     let bn = 0;
     if (data.length > 0) {
