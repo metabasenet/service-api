@@ -53,7 +53,8 @@ function sleep(ms) {
 }
 
 while (true) {
-  const txs = await query('select id,`hash` from tx where state is null limit 100',[])
+  const h = await provider.getBlockNumber()
+  const txs = await query('select id,`hash` from tx where state is null and number > ? limit 100',[h - 128])
   for (let i = 0; i < txs.length; i++) {
     console.log(txs[i].hash,txs[i].id)
     await Transaction(txs[i].hash)
