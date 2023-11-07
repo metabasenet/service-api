@@ -1,61 +1,67 @@
-import Web3 from 'web3';
+import { ethers } from 'ethers'
+import moment from 'moment'
+import mysql from 'mysql'
+import config from '../config/config.js'
 
-// 连接到以太坊节点
-const web3 = new Web3('https://bsc-dataseed1.binance.org/'); 
-//用您自己的Infura项目ID替换
+const connection = mysql.createConnection(config.database)
+const rpc = 'http://127.0.0.1:7545'
+//const rpc = 'https://rpc.metabasenet.site'
 
-// 交易哈希，将其替换为您要查询的实际交易哈希
-const transactionHash = '0x769dc8719b71c58039db8d57fab79c422c5007bf96588568bb1fd23612cfb88e';
+function query(sql, params) {
+  return new Promise(fun => {
+    connection.query(sql, params, (err, result) => {
+      if (err) {
+        fun(err)
+        return
+      }
+      fun(result)
+    })
+  })
+}
 
-// 获取交易的内部交易
-//const receipt = await web3.eth.getTransactionReceipt(transactionHash)
-//const internalTransactions = receipt.logs.filter((log) => log.topics[0] === '0x0000000000000000000000000000000000000000000000000000000000000000');
-//console.log(internalTransactions)
+const provider = new ethers.JsonRpcProvider(rpc);
 
+async function Transaction(transactionHash) {
+  const ret = await provider.getTransactionReceipt(transactionHash);
+  if (ret.status == 1) {
+    const from = ret.to
+    const tx = await provider.getTransaction(transactionHash);
+    if (tx.value > 0n) {
+      await query('call add_transfer(?,?,?,?,?,?)', [transactionHash, -1, ret.from, ret.to, ethers.formatEther(tx.value), ''])
+    }
 
-web3.eth.currentProvider.send(
-    {
-      jsonrpc: '2.0',
-      method: 'debug_traceTransaction',
-      params: [transactionHash, {}], // 可选参数，这里为空对象，您可以根据需要传递其他选项
-      id: new Date().getTime()
-    },
-    (error, result) => {
-      if (!error) {
-        console.log('Trace Result:', result);
-      } else {
-        console.error('Error tracing transaction:', error);
+    const result = await provider.send('debug_traceTransaction', [transactionHash]);
+    for (let i = 0; i < result.structLogs.length; i++) {
+      if (result.structLogs[i].op == 'CALL') {
+        const l = result.structLogs[i].stack.length;
+        // gas 额度
+        const gas = result.structLogs[i].stack[l - 1];
+        const to = result.structLogs[i].stack[l - 2];
+        const value = ethers.formatEther(result.structLogs[i].stack[l - 3]);
+        const in_size = result.structLogs[i].stack[l - 5];
+        if (in_size == 0 && gas == 0) {
+          console.log(value, to);
+          await query('call add_transfer(?,?,?,?,?,?)', [transactionHash, i, from, to, value, ''])
+        }
       }
     }
-  );
-
-  web3.currentProvider.sendAsync({
-    method: "debug_traceTransaction",
-    params: ['0x3fac854179691e377fc1aa180b71a4033b6bb3bde2a7ef00bc8e78f849ad356e', {}],
-    jsonrpc: "2.0",
-    id: "2"
-  }, function (err, result) {
-    console.log(err)
-    console.log(result)
-  });
-  
-/*
-web3.eth.getTransaction(transactionHash, (error, transaction) => {
-    //console.log('ddd')
-  if (!error) {
-    web3.eth.getTransactionReceipt(transactionHash, (error, receipt) => {
-        console.log(receipt)
-      if (!error) {
-        const internalTransactions = receipt.logs.filter((log) => log.topics[0] === '0x0000000000000000000000000000000000000000000000000000000000000000');
-        console.log('Internal Transactions:', internalTransactions);
-      } else {
-        console.error('Error fetching transaction receipt:', error);
-      }
-    });
-  } else {
-    console.error('Error fetching transaction:', error);
   }
-});*/
+}
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
+while (true) {
+  const txs = await query('select id,`hash` from tx where state is null limit 100',[])
+  for (let i = 0; i < txs.length; i++) {
+    console.log(txs[i].hash,txs[i].id)
+    await Transaction(txs[i].hash)
+    await query('update tx set state = 1 where id = ?',[txs[i].id])
+  }
+  await sleep(1000 * 5)
+  const time = moment().format('YYYY-MM-DD HH:mm:ss')
+  console.log('sleep 5s ...', time)
+}
 
+//Transaction('0x87026c89adbea483874a5ffd715abd875dbaede2a27f5919bc18f604ec0f671a')

@@ -6,7 +6,8 @@ import config from '../config/config.js'
 const connection = mysql.createConnection(config.database)
 
 const erc20_abi = JSON.parse(fs.readFileSync('./erc20.json', 'utf8'));
-const rpc = 'https://rpc.metabasenet.site'
+const rpc = 'http://127.0.0.1:7545'
+//const rpc = 'https://rpc.metabasenet.site'
 
 const provider = new ethers.JsonRpcProvider(rpc)
 const usdt_addr = '0xe03d4d96678657E680b9628c8fbA8F445c91e83a'
@@ -51,26 +52,39 @@ async function sync(bn0, bn1) {
     }
 }
 
+async function task() {
+    const data = await query('SELECT `hash` FROM erc20transfer order by id desc limit 1;', [])
+    //console.log(config.wgt_addr)
+    let bn = 0;
+    if (data.length > 0) {
+        const ret = await provider.getTransactionReceipt(data[0].hash)
+        bn = ret.blockNumber
+    }
 
-const data = await query('SELECT `hash` FROM erc20transfer order by id desc limit 1;', [])
-//console.log(config.wgt_addr)
-let bn = 0;
-if (data.length > 0) {
-    const ret = await provider.getTransactionReceipt(data[0].hash)
-    bn = ret.blockNumber
+    while (true) {
+        const bn1 = await provider.getBlockNumber()
+        if (bn1 > bn + 5000) {
+            await sync(bn, bn + 5000)
+            bn = bn + 5000
+            console.log(bn)
+        } else {
+            //console.log('subscribe...')
+            //subscribe()
+            await sync(bn, 'latest')
+            console.log('latest')
+            break
+        }
+    }
+}
+
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 while (true) {
-    const bn1 = await provider.getBlockNumber()
-    if (bn1 > bn + 5000) {
-        await sync(bn, bn + 5000)
-        bn = bn + 5000
-        console.log(bn)
-    } else {
-        console.log('subscribe...')
-        subscribe()
-        await sync(bn, 'latest')
-        console.log('latest')
-        break
-    }
+    await task();
+    await sleep(1000 * 5);
+    const time = moment().format('YYYY-MM-DD HH:mm:ss');
+    console.log('sleep 5s ...', time);
 }
