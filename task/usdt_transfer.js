@@ -2,6 +2,7 @@ import { ethers } from 'ethers'
 import fs from 'fs'
 import mysql from 'mysql'
 import config from '../config/config.js'
+import moment from 'moment'
 
 const connection = mysql.createConnection(config.database)
 
