@@ -53,7 +53,7 @@ async function Transaction(transactionHash) {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-/*
+
 while (true) {
   const h = await provider.getBlockNumber()
   const txs = await query('select id,`hash` from tx where state is null and number > ? limit 100',[h - 128])
@@ -66,5 +66,4 @@ while (true) {
   const time = moment().format('YYYY-MM-DD HH:mm:ss')
   console.log('sleep 5s ...', time)
 }
-*/
-Transaction('0x0e968b099acbd38bca929447c1796ede404667fb7fff0402aeae54f6dad3e809')
+
