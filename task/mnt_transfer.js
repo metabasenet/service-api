@@ -4,8 +4,8 @@ import mysql from 'mysql'
 import config from '../config/config.js'
 
 const connection = mysql.createConnection(config.database)
-const rpc = 'http://127.0.0.1:7545'
-//const rpc = 'https://rpc.metabasenet.site'
+//const rpc = 'http://127.0.0.1:7545'
+const rpc = 'https://rpc.metabasenet.site'
 
 function query(sql, params) {
   return new Promise(fun => {
@@ -23,13 +23,15 @@ const provider = new ethers.JsonRpcProvider(rpc);
 
 async function Transaction(transactionHash) {
   const ret = await provider.getTransactionReceipt(transactionHash);
+  
   if (ret.status == 1) {
     const from = ret.to
     const tx = await provider.getTransaction(transactionHash);
-    if (tx.value > 0n) {
-      await query('call add_transfer(?,?,?,?,?,?)', [transactionHash, -1, ret.from, ret.to, ethers.formatEther(tx.value), ''])
-    }
     const utc = (await provider.getBlock(ret.blockNumber)).timestamp;
+    if (tx.value > 0n) {
+      await query('call add_transfer(?,?,?,?,?,?,?)', [transactionHash, -1, ret.from, ret.to, ethers.formatEther(tx.value), '',utc])
+    }
+    
     const result = await provider.send('debug_traceTransaction', [transactionHash]);
     for (let i = 0; i < result.structLogs.length; i++) {
       if (result.structLogs[i].op == 'CALL') {
@@ -51,7 +53,7 @@ async function Transaction(transactionHash) {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-
+/*
 while (true) {
   const h = await provider.getBlockNumber()
   const txs = await query('select id,`hash` from tx where state is null and number > ? limit 100',[h - 128])
@@ -64,5 +66,5 @@ while (true) {
   const time = moment().format('YYYY-MM-DD HH:mm:ss')
   console.log('sleep 5s ...', time)
 }
-
-//Transaction('0x87026c89adbea483874a5ffd715abd875dbaede2a27f5919bc18f604ec0f671a')
+*/
+Transaction('0x0e968b099acbd38bca929447c1796ede404667fb7fff0402aeae54f6dad3e809')
