@@ -40,9 +40,9 @@ async function Transaction(transactionHash) {
         const gas = result.structLogs[i].stack[l - 1];
         const to = result.structLogs[i].stack[l - 2];
         const value = ethers.formatEther(result.structLogs[i].stack[l - 3]);
-        //const in_size = result.structLogs[i].stack[l - 5];
+        const in_size = result.structLogs[i].stack[l - 5];
         //console.log(gas, to, value, in_size);
-        if (gas == 0) {
+        if (in_size == 0) {
           console.log(value, to);
           await query('call add_transfer(?,?,?,?,?,?,?)', [transactionHash, i, from, to, value, '',utc])
         }
