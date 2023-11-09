@@ -16,7 +16,6 @@ const usdt = new ethers.Contract(usdt_addr, erc20_abi, provider)
 
 const coder = ethers.AbiCoder.defaultAbiCoder()
 
-
 function query(sql, params) {
     return new Promise(fun => {
         connection.query(sql, params, (err, result) => {
@@ -46,18 +45,18 @@ async function sync(bn0, bn1) {
     for (let i = 0; i < transfer_logs.length; i++) {
         const log = transfer_logs[i]
         const txid = log.transactionHash;
-        const txid_index = log.transactionIndex
+        const index = log.index
         const from = coder.decode(['address'], log.topics[1])[0]
         const to = coder.decode(['address'], log.topics[2])[0]
         const value = ethers.formatEther(coder.decode(['uint256'], log.data)[0])
         const utc = (await provider.getBlock(log.blockNumber)).timestamp
         console.log(from, to, value)
-        await query('call add_transfer(?,?,?,?,?,?,?)', [txid, txid_index, from, to, value, usdt_addr, utc])
+        await query('call add_transfer(?,?,?,?,?,?,?)', [txid, index, from, to, value, usdt_addr, utc])
     }
 }
 
 async function task() {
-    const data = await query("SELECT `hash` FROM erc20transfer where erc20_addr != '' order by id desc limit 1", [])
+    const data = await query("SELECT `hash` FROM erc20transfer where erc20_addr = ? order by id desc limit 1", [usdt_addr])
     //console.log(config.wgt_addr)
     let bn = 0;
     if (data.length > 0) {
