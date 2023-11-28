@@ -16,12 +16,12 @@ function ReConnecting() {
 ReConnecting()
 
 let c = 0
-setInterval(async ()=> {
-    const time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    c = c + 1
-    const sql = `select max(id) as id, ${c} as A from friends`
-    const ret = await query(sql,[])
-    console.log(time,ret[0])
+setInterval(async () => {
+    const time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    c = c + 1;
+    const sql = `select ${c} as A`;
+    const ret = await query(sql, []);
+    console.log(time, ret[0]);
 }, 1800 * 1000)
 
 function query(sql, params) {
@@ -43,4 +43,4 @@ function sleep(ms) {
 
 const provider = new ethers.JsonRpcProvider('http://127.0.0.1:7545')
 
-export { query, sleep, provider}
+export { query, sleep, provider }
