@@ -29,6 +29,10 @@ async function Transaction(transactionHash) {
     const tx = await provider.getTransaction(transactionHash);
     const utc = (await provider.getBlock(ret.blockNumber)).timestamp;
     if (tx.value > 0n) {
+      const f_b = ethers.formatEther(await provider.getBalance(ret.from));
+      const t_b = ethers.formatEther(await provider.getBalance(ret.to));
+      await query('call mnt_b(?,?)',[ret.from,f_b]);
+      await query('call mnt_b(?,?)',[ret.to,t_b]);
       await query('call add_transfer(?,?,?,?,?,?,?)', [transactionHash, -1, ret.from, ret.to, ethers.formatEther(tx.value), '', utc])
     }
 
