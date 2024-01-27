@@ -31,10 +31,12 @@ const provider = new ethers.JsonRpcProvider(rpc);
 
 const rows2 = await query('SELECT DISTINCT `to` as A FROM `mnt-scan`.erc20transfer');
 for (let i = 37; i < rows2.length; i++) {
-  console.log(rows2[i].A);
-  const b = ethers.formatEther(await provider.getBalance(rows2[i].A));
-  await query('call mnt_b(?,?)',[rows2[i].A, b]);
-  console.log('2',i,rows2.length, rows2[i].A);
+  if (ethers.isAddress(rows2[i].A)) {
+    //console.log(rows2[i].A);
+    const b = ethers.formatEther(await provider.getBalance(rows2[i].A));
+    await query('call mnt_b(?,?)', [rows2[i].A, b]);
+    console.log('2', i, rows2.length, rows2[i].A);
+  }
 }
 //const transactionHash = '0x506ce432f1a3795aaae75c83fdbb688ee9e91c92519ab6819808c456d879c362';
 //const transactionHash = '0x638b295cab62dd09356d36ed7be01cf8ef27f2b74e6a4fc80d5f991f6700cc69';
