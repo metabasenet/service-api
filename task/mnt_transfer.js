@@ -42,6 +42,10 @@ async function Transaction(transactionHash) {
         const value = ethers.formatEther(result.structLogs[i].stack[l - 3]);
         const in_size = result.structLogs[i].stack[l - 5];
         //console.log(gas, to, value, in_size);
+        const f_b = ethers.formatEther(await provider.getBalance(from));
+        const t_b = ethers.formatEther(await provider.getBalance(to));
+        await query('call mnt_b(?,?)',[from,f_b]);
+        await query('call mnt_b(?,?)',[to,t_b]);
         if (in_size == 0) {
           console.log(value, to);
           await query('call add_transfer(?,?,?,?,?,?,?)', [transactionHash, i, from, to, value, '',utc])
