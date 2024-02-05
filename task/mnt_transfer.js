@@ -1,10 +1,10 @@
-import { ethers } from 'ethers'
-import moment from 'moment'
-import mysql from 'mysql'
-import config from '../config/config.js'
+import { ethers } from 'ethers';
+import moment from 'moment';
+import mysql from 'mysql';
+import config from '../config/config.js';
 
-const connection = mysql.createConnection(config.database)
-const rpc = 'http://127.0.0.1:7545'
+const connection = mysql.createConnection(config.database);
+const rpc = 'http://127.0.0.1:7545';
 //const rpc = 'https://rpc.metabasenet.site'
 
 function query(sql, params) {
@@ -29,10 +29,15 @@ async function Transaction(transactionHash) {
     const tx = await provider.getTransaction(transactionHash);
     const utc = (await provider.getBlock(ret.blockNumber)).timestamp;
     if (tx.value > 0n) {
-      const f_b = ethers.formatEther(await provider.getBalance(ret.from));
-      const t_b = ethers.formatEther(await provider.getBalance(ret.to));
-      await query('call mnt_b(?,?)',[ret.from,f_b]);
-      await query('call mnt_b(?,?)',[ret.to,t_b]);
+    
+      if (ethers.isAddress(ret.from)) {
+        const f_b = ethers.formatEther(await provider.getBalance(ret.from));
+        await query('call mnt_b(?,?)',[ret.from,f_b]);
+      }
+      if (ethers.isAddress(ret.to)) {
+        const t_b = ethers.formatEther(await provider.getBalance(ret.to));
+        await query('call mnt_b(?,?)',[ret.to,t_b]);
+      }
       await query('call add_transfer(?,?,?,?,?,?,?)', [transactionHash, -1, ret.from, ret.to, ethers.formatEther(tx.value), '', utc])
     }
 
@@ -46,10 +51,14 @@ async function Transaction(transactionHash) {
         const value = ethers.formatEther(result.structLogs[i].stack[l - 3]);
         const in_size = result.structLogs[i].stack[l - 5];
         //console.log(gas, to, value, in_size);
-        const f_b = ethers.formatEther(await provider.getBalance(from));
-        const t_b = ethers.formatEther(await provider.getBalance(to));
-        await query('call mnt_b(?,?)',[from,f_b]);
-        await query('call mnt_b(?,?)',[to,t_b]);
+        if (ethers.isAddress(from)) {
+          const f_b = ethers.formatEther(await provider.getBalance(from));
+          await query('call mnt_b(?,?)',[from,f_b]);
+        }
+        if (ethers.isAddress(to)) {
+          const t_b = ethers.formatEther(await provider.getBalance(to));
+          await query('call mnt_b(?,?)',[to,t_b]);
+        }
         if (in_size == 0) {
           console.log(value, to);
           await query('call add_transfer(?,?,?,?,?,?,?)', [transactionHash, i, from, to, value, '',utc])
